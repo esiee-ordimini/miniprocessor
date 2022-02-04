@@ -73,7 +73,7 @@ BEGIN
 		clock_enable_output_a => "BYPASS",
 		clock_enable_output_b => "BYPASS",
 		indata_reg_b => "CLOCK0",
-		init_file => "/user/bazyj/Documents/V13/mif/screen/ecrannoir.mif",
+		init_file => "/user/bazyj/Documents/miniprocessor/mif/screen/ecrannoir.mif",
 		intended_device_family => "Cyclone V",
 		lpm_type => "altsyncram",
 		numwords_a => 512,

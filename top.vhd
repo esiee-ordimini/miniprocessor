@@ -14,7 +14,7 @@ entity top is
 		hex3: out std_logic_vector(6 downto 0);
 		hex4: out std_logic_vector(6 downto 0);
 		hex5: out std_logic_vector(6 downto 0);
-		ledr: out std_logic_vector(8 downto 0);
+		ledr: out std_logic_vector(9 downto 0);
 	 
 		lt24_reset_n: out std_logic;
 		lt24_cs_n   : out std_logic;
@@ -28,6 +28,7 @@ end entity;
 
 architecture rtl of top is
 	signal mem_q : std_logic_vector (23 downto 0) ;
+	signal mem_q_memoire : std_logic_vector (23 downto 0) ;
 	signal gel :std_logic ; 
 	signal gel_valide :std_logic ; 
 	signal mem_address : std_logic_vector(15 downto 0 );
@@ -63,26 +64,29 @@ architecture rtl of top is
 	signal c    :  std_logic_vector(15 downto 0);   -- couleurs 16 bits
 
 	signal address_inter : std_logic_vector(9 downto 0);
+	
+	signal ledr_reg : std_logic_vector(9 downto 0);
+	signal ledr_next : std_logic_vector(9 downto 0);
 begin
 
 	gel <= not debug;
 	
-	ledr(7 downto 0) <= mem_address_send(7 downto 0);
-	
-	ledr(8) <= sel_next_ir;
+	ledr_next <= mem_data(9 downto 0) when mem_wren='1' and mem_address(10)='1'
+		else ledr_reg;
+		
+	ledr <= ledr_reg;
 
 	gel_valide <= '1' when gel = '1' and readmem = '0'
 		else '0';
 
-	mem_wren_send <= '0' when mem_address(9)='1'
-		else mem_wren;
+	mem_wren_send <= '0' when mem_address(9)='1' or mem_address(10)='1'
+		else mem_wren ;
 		
 	wren_1 <= '0' when mem_address(9)='0'
 		else mem_wren;
 
 	mem_address_send <= "00000000"&sw(7 downto 0) when gel_valide = '1'
 		else mem_address;
-		
 		
 	affichage <= ir when sw(9) = '1'
 		else X"0000"&state when sw(8) = '1'
@@ -96,6 +100,8 @@ begin
 
 	address_2 <= address_inter(8 downto 0);
 	
+	mem_q <= "00000000000000"&sw(9 downto 0) when mem_address(10)='1'
+		else mem_q_memoire;
 	
 	c(0) <= q_2(0);
 	c(1) <= q_2(1);
@@ -141,7 +147,7 @@ begin
 		clock		=> clk,
 		data		=> mem_data,
 		wren		=> mem_wren_send,
-		q		=> mem_q
+		q		=> mem_q_memoire
 	);
 	
 	fsm : entity work.fsm
@@ -204,4 +210,13 @@ begin
 		lt24_d			=> lt24_d,
 		lt24_lcd_on		=> lt24_lcd_on
 	);
+	
+	process(clk, resetn) is
+	begin
+		if resetn <= '0' then
+			ledr_reg <= (others => '0');
+		elsif rising_edge(clk) then
+			ledr_reg <= ledr_next;
+		end if;
+	end process;
 end architecture;
