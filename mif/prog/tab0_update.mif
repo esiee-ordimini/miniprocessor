@@ -1,0 +1,48 @@
+DEPTH=256;
+WIDTH=24;
+
+ADDRESS_RADIX = HEX;
+DATA_RADIX = HEX;
+
+CONTENT
+BEGIN
+[00..FF] : 000000;
+00:	01001C;	% MOV		R1, #taille %
+01:	050000;   % LDRB		R3, [R1] %
+02:	01001A;	% MOV		R1, #idx %
+03:	040000;	% LDRB		R0, [R1] %
+04:	070000;	% CMP		R0, R3 %
+05:	080019;	% BEQ		fin %
+06:	01001E;	% MOV		R1, #tab %
+07:	090000;	% ADD		R1, R1, R0 %
+08:	040000;	% LDRB		R0, [R1] %
+09:	01001D;	% MOV		R1, #inf %
+0A:	050000;	% LDRB		R3, [R1] %
+0B:	070000;	% CMP		R0, R3 %
+0C:	0A0012;	% BCC		setZero %
+0D:	01001A;	% MOV		R1, #idx %
+0E:	040000;	% LDRB		R0, [R1] %
+0F:	0D0001;	% ADD		R0, R0, #0x01 %
+10:	060000;	% STRB		R0, [R1] %
+11:	0B0000;	% B		test %
+12:	01001A;	% MOV		R1, #idx %
+13:	040000;	% LDRB		R0, [R1] %
+14:	01001E;	% MOV		R1, #tab %
+15:	090000;	% ADD		R1, R1, R0 %
+16:	020000;	% MOV		R0, #0 %
+17:	060000;	% STRB		R0, [R1] %
+18: 0B000D; % B increment %
+19: 0B0019;
+
+
+1A:	000000;	% idx %
+1B:	000000;	% res %
+1C:	000006;	% taille %
+1D:	000040;	% inf %
+1E:	000000;	% tab %
+1F:	000017;	% tab %
+20:	000000;	% tab %
+21:	000033;	% tab %
+22:	000042;	% tab %
+23:	000023;	% tab %
+END

@@ -1,0 +1,43 @@
+DEPTH=256;
+WIDTH=24;
+
+ADDRESS_RADIX = HEX;
+DATA_RADIX = HEX;
+
+CONTENT
+BEGIN
+[00..FF] : 00;
+00: 01001D;			% MOV R1, #current %
+01: 040000;			% LDRB R0, [R1] %
+02: 030001;			% MOV R3, #0x1 %
+03: 0F0000;			% ADD R0, R0, R3 %
+04: 060000;			% STRB		R0, [R1]%
+05: 01001E;			% MOV R1, #endtempo %
+06: 050000;		        %LDRB R3, [R1] %
+07: 070000;			% CMP R0, R3 %
+08: 08000A;			% BEQ affiche %
+09: 0B0000;			% B increm %
+0A: 01001F;			% MOV R1, #idx %
+0B: 040000;	     		% LDRB R0, [R1] %
+0C: 010200;			% MOV R1, #0x200 %
+0D: 090000;			% ADD R1, R1, R0 %
+0E: 0200C0;			% MOV R0, #0xC0 %
+0F: 060000;			% STRB R0, [R1] %
+10: 01001F;			% MOV R1, #idx %
+11: 040000;			% LDRB R0, [R1] %
+12: 03012B;			% MOV R3, #0x12B %
+13: 070000;			% CMP R0, R3 %
+14: 08001C; 	         	% BEQ endprog %
+15: 030001;			% MOV R3, #0x1 %
+16: 110000;			% ADD R0, R0, R3 %
+17: 060000;			% STRB R0, [R1] %
+18: 01001D;			% MOV R1, #current %
+19: 020000;			% MOV R0, #0x0 %
+1A: 060000;			% STRB R0, [R1] %
+1B: 0B0000;			% B increm %
+1C: 0B001C;			% B endprog %
+1D: 000000;			% current DCB 0x0 %
+1E: AAAAAA;			% endtempo DCB 0xAAAAAA %
+1F: 000000;			% idx DCB 0x0 %
+
+END
