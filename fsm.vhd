@@ -173,6 +173,7 @@ begin
 		state_out <= X"07";
 		next_state <= Incr_PC;
 		sel_r0_next <= "0001";
+		sel_address <= '1';
 
 
 	--current state == Incr_PC
@@ -260,6 +261,7 @@ begin
 		state_out <= X"15";
 		next_state <= Incr_PC;
 		sel_r3_next <= "001";
+		sel_address <= '1';
 
 	--current state == ADD_R1_R0
 	when ADD_R1_R0=>

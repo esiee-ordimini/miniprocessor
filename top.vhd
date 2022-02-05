@@ -10,7 +10,7 @@ port (
 	debug				: in std_logic;
 
 	-----------------------------------------------------------------
-	-- Signaux responsable des afficheurs 7 segments
+	-- Signaux responsable des afficheurs 7 segments et leds
 	-----------------------------------------------------------------	
 	hex0				: out std_logic_vector(6 downto 0);
 	hex1				: out std_logic_vector(6 downto 0);
@@ -18,7 +18,7 @@ port (
 	hex3				: out std_logic_vector(6 downto 0);
 	hex4				: out std_logic_vector(6 downto 0);
 	hex5				: out std_logic_vector(6 downto 0);
-	ledr				: out std_logic_vector(8 downto 0);
+	ledr				: out std_logic_vector(9 downto 0);
 
 	-----------------------------------------------------------------
 	-- Signaux responsable du controle de l'ecran 
@@ -71,11 +71,14 @@ architecture rtl of top is
 	signal ir 			: std_logic_vector(23 downto 0);
 	signal wren 			: std_logic;
 	signal address_inter		: std_logic_vector(9 downto 0);
+	signal q 			: std_logic_vector (23 downto 0) ;
 
 	-----------------------------------------------------------------
-	-- Signaux responsable de l'affichage
+	-- Signaux responsable de l'affichage 7 segments et leds
 	-----------------------------------------------------------------
 	signal affichage 		: std_logic_vector(23 downto 0);
+	signal ledr_reg 		: std_logic_vector(9 downto 0);
+	signal ledr_next 		: std_logic_vector(9 downto 0);
 	
 	-----------------------------------------------------------------
 	-- Signaux responsable de l'ecran
@@ -92,10 +95,17 @@ begin
 
 	mem_wren <= '0' when mem_address(9)='1'
 		else wren;
+
+	ledr_next <= mem_data(9 downto 0) when mem_wren='1' and mem_address(10)='1'
+		else ledr_reg;
+		
+	ledr <= ledr_reg;
+
+	mem_wren <= '0' when mem_address(9)='1' or mem_address(10)='1'
+		else wren ;
 		
 	mem_ecran_wren <= '0' when mem_address(9)='0'
 		else mem_wren;
-		
 		
 	affichage <= ir when sw(9) = '1'
 		else X"0000"&state when sw(8) = '1'
@@ -107,6 +117,8 @@ begin
 
 	mem_ecran_address_2 <= address_inter(8 downto 0);
 	
+	q <= "00000000000000"&sw(9 downto 0) when mem_address(10)='1'
+		else mem_q;
 	
 	c(0)  <= mem_ecran_q(0);
 	c(1)  <= mem_ecran_q(1);
@@ -132,7 +144,7 @@ begin
 	port map(
 		clk => clk,
 		resetn => resetn,
-		mem_q => mem_q,
+		mem_q => q,
 		mem_data => mem_data,
 		sel_next_pc => sel_next_pc,
 		sel_next_ir => sel_next_ir,
@@ -231,5 +243,13 @@ begin
 		lt24_d			=> lt24_d,
 		lt24_lcd_on		=> lt24_lcd_on
 	);
-
+	
+	process(clk, resetn) is
+	begin
+		if resetn <= '0' then
+			ledr_reg <= (others => '0');
+		elsif rising_edge(clk) then
+			ledr_reg <= ledr_next;
+		end if;
+	end process;
 end architecture;
