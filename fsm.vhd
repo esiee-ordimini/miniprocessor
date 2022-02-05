@@ -5,7 +5,6 @@ use ieee.numeric_std.all;
 entity fsm is port(
 	clk: in std_logic;
 	resetn: in std_logic;
-	gel : in std_logic;
 	opcode : in std_logic_vector(7 downto 0);
 	status : in std_logic_vector(1 downto 0);
 
@@ -16,8 +15,7 @@ entity fsm is port(
 	sel_r3_next : out std_logic_vector(2 downto 0);
 	sel_status : out std_logic;
 	sel_address : out std_logic;
-	readmem : out std_logic;
-	mem_wren : out std_logic;
+	wren : out std_logic;
 	state_out : out std_logic_vector(7 downto 0)
 );
 end entity;
@@ -69,10 +67,10 @@ begin
 	end if;
 	end process;
 
-	process(current_state, opcode, opcode_value, status_N, status_Z, gel) is
+	process(current_state, opcode, opcode_value, status_N, status_Z) is
 	begin
 		next_state <= current_state;
-		-- on d�finie toute nos valeur pour controler nos multiplexeur a 0
+		-- on definie toute nos valeur pour controler nos multiplexeur a 0
 		sel_pc_next <= (others => '0');
 		sel_ir_next <= '0';
 		sel_r0_next <= (others => '0');
@@ -80,8 +78,7 @@ begin
 		sel_r3_next <= (others => '0');
 		sel_address <= '0';
 		sel_status <= '0';
-		mem_wren <= '0';	
-		readmem <= '1';
+		wren <= '0';	
 		state_out <= X"00";
 
 	case current_state is
@@ -100,7 +97,6 @@ begin
 	--current state == Decode_Inst
 	when Decode_Inst =>
 		state_out <= X"03";
-		readmem <= '0';
 		if opcode_value = x"01" then 
 		next_state <= Ecrit_R1;
 		elsif opcode_value = x"04" then
@@ -164,7 +160,7 @@ begin
 		state_out <= X"05";
 		next_state <= Incr_PC;
 		sel_address <= '1';
-		mem_wren <= '1';
+		wren <= '1';
 
 	--current state == Lit_MemR1
 	when Lit_MemR1 =>
@@ -270,13 +266,10 @@ begin
 		state_out <= X"16";
 		next_state <= Incr_PC;
 		sel_r1_next <= "10";
-		
 
 	end case;
-	if gel = '1' then 
-		next_state <= current_state;
-	end if;
-end process;
+
+	end process;
      
 end architecture;
 

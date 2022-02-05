@@ -18,8 +18,7 @@ port (
 	sel_status : in std_logic;
 	status_send : out std_logic_vector(1 downto 0);
 	opcode : out std_logic_vector(7 downto 0);
-	ir : out std_logic_vector(23 downto 0);
-	gel : in std_logic
+	ir : out std_logic_vector(23 downto 0)
 );
 end entity;
 architecture rtl of datapath is
@@ -100,7 +99,7 @@ begin
 	ir <= ir_reg;
 	
 
-	process(clk, resetn, gel) is
+	process(clk, resetn) is
 	begin
 		if resetn <= '0' then
 			r0_reg <= (others => '0');
@@ -110,14 +109,12 @@ begin
 			ir_reg <= (others => '0');
 			status_reg <= (others => '0');
 		elsif rising_edge(clk) then
-			if gel = '0' then 
-				r0_reg <= r0_next;
-				r1_reg <= r1_next;
-				r3_reg <= r3_next;
-				pc_reg <= pc_next;
-				ir_reg <= ir_next;
-				status_reg <= status_next;
-			end if; 
+			r0_reg <= r0_next;
+			r1_reg <= r1_next;
+			r3_reg <= r3_next;
+			pc_reg <= pc_next;
+			ir_reg <= ir_next;
+			status_reg <= status_next;
 		end if;
 	end process;
 

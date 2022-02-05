@@ -26,25 +26,13 @@ architecture testbench of tb is
 	signal lt24_wr_n   : std_logic;
 	signal lt24_d      : std_logic_vector(15 downto 0);
 	signal lt24_lcd_on : std_logic;
-	signal x    :  std_logic_vector(7 downto 0);    -- 0 .. 239 => 8 bits
-	signal y    :  std_logic_vector(8 downto 0);    -- 0 .. 319 => 9 bits
 begin
 	clk<= not clk after hp;
 	process is	
 	begin
 		sw <= "0000000000";
-		x <= "00000000" ;
-		y <= "000000000" ;
 		resetn<= '0';  --initialisation active
 		wait for 4*hp ;
-		x <= "00010100" ;
-		y <= "000000000";
-		wait for 4*hp;
-		x <= "00010000" ;
-		y <= "000110000" ;
-		wait for 4*hp;
-		x <= "11111111" ;
-		y <= "111111111" ;
 		wait; 
        
 	end process;
@@ -67,9 +55,7 @@ begin
 			lt24_rd_n => lt24_rd_n,
 			lt24_wr_n => lt24_wr_n,
 			lt24_d => lt24_d,
-			lt24_lcd_on => lt24_lcd_on,
-			x => x,
-			y => y
+			lt24_lcd_on => lt24_lcd_on
 		);
 
 	
