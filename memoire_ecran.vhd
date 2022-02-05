@@ -43,8 +43,8 @@ USE altera_mf.altera_mf_components.all;
 ENTITY memoire_ecran IS
 	PORT
 	(
-		address_a		: IN STD_LOGIC_VECTOR (8 DOWNTO 0);
-		address_b		: IN STD_LOGIC_VECTOR (8 DOWNTO 0);
+		address_a	: IN STD_LOGIC_VECTOR (8 DOWNTO 0);
+		address_b	: IN STD_LOGIC_VECTOR (8 DOWNTO 0);
 		clock		: IN STD_LOGIC  := '1';
 		data_a		: IN STD_LOGIC_VECTOR (7 DOWNTO 0);
 		data_b		: IN STD_LOGIC_VECTOR (7 DOWNTO 0);
@@ -73,7 +73,7 @@ BEGIN
 		clock_enable_output_a => "BYPASS",
 		clock_enable_output_b => "BYPASS",
 		indata_reg_b => "CLOCK0",
-		init_file => "/user/bazyj/Documents/miniprocessor/mif/screen/ecrannoir.mif",
+		init_file => "C:\Users\bazyj\Documents\miniprocessor\mif\screen\ecrannoir.mif",
 		intended_device_family => "Cyclone V",
 		lpm_type => "altsyncram",
 		numwords_a => 512,

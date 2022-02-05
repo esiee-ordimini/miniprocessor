@@ -21,6 +21,10 @@ entity fsm is port(
 end entity;
 
 architecture rtl of fsm is 
+
+	-----------------------------------------------------------------
+	-- Signaux correspondant a chaque etat
+	-----------------------------------------------------------------
 	type state is (
 		Lit_Inst,
 		Ecrit_IR,
@@ -45,19 +49,31 @@ architecture rtl of fsm is
 		ADD_R1_R0, 
 		Ecrit_R3_LDRB
 	);
+
+	-----------------------------------------------------------------
+	-- Signaux pour les états
+	-----------------------------------------------------------------
 	signal current_state : state;
 	signal next_state : state;
 
+	-----------------------------------------------------------------
+	-- Signaux de comparaison
+	-----------------------------------------------------------------
 	signal opcode_value : unsigned(7 downto 0);
 	signal status_N : std_logic;
 	signal status_Z : std_logic;
 begin
 
-	
+	-----------------------------------------------------------------
+	-- Définition des signaux locauxs
+	-----------------------------------------------------------------
 	status_N <= status(1);
 	status_Z <= status(0);
 	opcode_value <= unsigned(opcode);
 
+	-----------------------------------------------------------------
+	-- Registre pour changer d'etat a chaque frond montant
+	-----------------------------------------------------------------
 	process(clk, resetn) is
 	begin
 		if resetn <= '0' then
@@ -67,9 +83,13 @@ begin
 	end if;
 	end process;
 
+	-----------------------------------------------------------------
+	-- Process pour choisir l'etat
+	-----------------------------------------------------------------
 	process(current_state, opcode, opcode_value, status_N, status_Z) is
 	begin
 		next_state <= current_state;
+
 		-- on definie toute nos valeur pour controler nos multiplexeur a 0
 		sel_pc_next <= (others => '0');
 		sel_ir_next <= '0';

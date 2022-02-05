@@ -39,7 +39,7 @@ BEGIN
 15: 060000;			%		STRB		R0, [R1]%
 16: 0B0000;			%		B		test%
         			%fin%
-17: 0B0017;         %		END		; à mettre obligatoirement en fin de code,%      
+17: 0B0017;         		%END		; à mettre obligatoirement en fin de code,%      
 18: 000007;			%vn		DCB		6%
 19: 00000E;			%res		DCB		14%
 END
