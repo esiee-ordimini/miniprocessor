@@ -93,9 +93,6 @@ begin
 	
 	ledr(8) <= sel_next_ir;
 
-	mem_wren <= '0' when mem_address(9)='1'
-		else wren;
-
 	ledr_next <= mem_data(9 downto 0) when mem_wren='1' and mem_address(10)='1'
 		else ledr_reg;
 		
@@ -162,19 +159,27 @@ begin
 	-----------------------------------------------------------------
 	-- Appelle du fichier memoire_double
 	-----------------------------------------------------------------
-	memoire : entity work.memoire_double
+	--memoire : entity work.memoire_double
+	--port map(
+	--	address_a	=> mem_address(7 downto 0),
+	--	address_b	=> mem_address_debug,
+	--	clock		=> clk,
+	--	data_a		=> mem_data,
+	--	data_b		=> (others => '0'),
+	--	wren_a		=> mem_wren,
+	--	wren_b		=> '0',
+	--	q_a		=> mem_q,
+	--	q_b		=> mem_q_debug
+	--);
+	memoire : entity work.memoire
 	port map(
-		address_a	=> mem_address(7 downto 0),
-		address_b	=> mem_address_debug,
+		address		=> mem_address(7 downto 0),
 		clock		=> clk,
-		data_a		=> mem_data,
-		data_b		=> (others => '0'),
-		wren_a		=> mem_wren,
-		wren_b		=> '0',
-		q_a		=> mem_q,
-		q_b		=> mem_q_debug
+		data		=> mem_data,
+		wren 		=> mem_wren,
+		q		=> mem_q
 	);
-	
+
 	-----------------------------------------------------------------
 	-- Appelle du fichier fsm
 	-----------------------------------------------------------------

@@ -62,6 +62,7 @@ architecture rtl of fsm is
 	signal opcode_value : unsigned(7 downto 0);
 	signal status_N : std_logic;
 	signal status_Z : std_logic;
+
 begin
 
 	-----------------------------------------------------------------

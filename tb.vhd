@@ -43,8 +43,10 @@ begin
 		-- Définition des différents signaux
 		-----------------------------------------------------------------
 		sw <= "0000000000";
+		debug <= '1';
 		resetn<= '0';  --initialisation active
 		wait for 4*hp ;
+		resetn<= '1';  --initialisation desactive
 		wait; 
        
 	end process;

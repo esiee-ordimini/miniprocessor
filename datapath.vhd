@@ -115,7 +115,7 @@ begin
 	-----------------------------------------------------------------
 	-- Action réaliser sur les différents signaux
 	-----------------------------------------------------------------
-	mem_data <= r0_reg ;
+	mem_data <= "00000000"&r0_reg(15 downto 0) ;
 	status_send <= status_reg;
 	param <= ir_reg(15 downto 0 );
 	opcode <= ir_reg(23 downto 16);
