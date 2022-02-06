@@ -15,6 +15,7 @@ entity fsm is port(
 	sel_r3_next : out std_logic_vector(2 downto 0);
 	sel_status : out std_logic;
 	sel_address : out std_logic;
+	cmd_cmp : out std_logic;
 	wren : out std_logic;
 	state_out : out std_logic_vector(7 downto 0)
 );
@@ -47,7 +48,8 @@ architecture rtl of fsm is
 		MOV_R0, 
 		Lit_MemR1_R3, 
 		ADD_R1_R0, 
-		Ecrit_R3_LDRB
+		Ecrit_R3_LDRB,
+		Attendre
 	);
 
 	-----------------------------------------------------------------
@@ -99,6 +101,7 @@ begin
 		sel_r3_next <= (others => '0');
 		sel_address <= '0';
 		sel_status <= '0';
+		cmd_cmp <= '1';
 		wren <= '0';	
 		state_out <= X"00";
 
@@ -168,6 +171,8 @@ begin
 			else 
 				next_state <=Incr_PC;
 			end if;
+		elsif opcode_value = x"15" then
+		next_state <= Attendre;
 	end if;
 
 	--current state == Ecrit_R1
@@ -289,6 +294,12 @@ begin
 		state_out <= X"16";
 		next_state <= Incr_PC;
 		sel_r1_next <= "10";
+
+	--current state == Attendre
+	when Attendre=>
+		state_out <= X"17";
+		next_state <= Incr_PC;
+		cmd_cmp <= '0';
 
 	end case;
 

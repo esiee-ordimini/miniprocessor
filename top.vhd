@@ -70,6 +70,7 @@ architecture rtl of top is
 	signal state 			: std_logic_vector(7 downto 0);
 	signal ir 			: std_logic_vector(23 downto 0);
 	signal wren 			: std_logic;
+	signal cmd_cmp 			: std_logic;
 	signal address_inter		: std_logic_vector(9 downto 0);
 	signal q 			: std_logic_vector (23 downto 0) ;
 
@@ -153,31 +154,24 @@ begin
 		status_send => status,
 		mem_address => mem_address,
 		opcode => opcode,
+		cmd_cmp => cmd_cmp,
 		ir => ir
 	);
 
 	-----------------------------------------------------------------
 	-- Appelle du fichier memoire_double
 	-----------------------------------------------------------------
-	--memoire : entity work.memoire_double
-	--port map(
-	--	address_a	=> mem_address(7 downto 0),
-	--	address_b	=> mem_address_debug,
-	--	clock		=> clk,
-	--	data_a		=> mem_data,
-	--	data_b		=> (others => '0'),
-	--	wren_a		=> mem_wren,
-	--	wren_b		=> '0',
-	--	q_a		=> mem_q,
-	--	q_b		=> mem_q_debug
-	--);
-	memoire : entity work.memoire
+	memoire : entity work.memoire_double
 	port map(
-		address		=> mem_address(7 downto 0),
+		address_a	=> mem_address(7 downto 0),
+		address_b	=> mem_address_debug,
 		clock		=> clk,
-		data		=> mem_data,
-		wren 		=> mem_wren,
-		q		=> mem_q
+		data_a		=> mem_data,
+		data_b		=> (others => '0'),
+		wren_a		=> mem_wren,
+		wren_b		=> '0',
+		q_a		=> mem_q,
+		q_b		=> mem_q_debug
 	);
 
 	-----------------------------------------------------------------
@@ -197,6 +191,7 @@ begin
 		sel_status => sel_status,
 		status => status,
 		OPCODE => opcode,
+		cmd_cmp => cmd_cmp,
 		state_out => state
 	);
 

@@ -16,6 +16,7 @@ port (
 	sel_next_r3 		: in std_logic_vector(2 downto 0);
 	sel_address 		: in std_logic;
 	sel_status 		: in std_logic;
+	cmd_cmp			: in std_logic;
 	status_send 		: out std_logic_vector(1 downto 0);
 	opcode 			: out std_logic_vector(7 downto 0);
 	ir 			: out std_logic_vector(23 downto 0)
@@ -27,6 +28,9 @@ architecture rtl of datapath is
 	-- Signaux sans le registre
 	-----------------------------------------------------------------
 	signal param : std_logic_vector(15 downto 0);
+	signal end_tempo : std_logic;
+	signal param_wait_inter : std_logic_vector(31 downto 0);
+	signal param_wait : std_logic_vector(31 downto 0);
 
 	-----------------------------------------------------------------
 	-- Signaux avant le registre
@@ -37,6 +41,7 @@ architecture rtl of datapath is
 	signal pc_next 		: std_logic_vector(15 downto 0);
 	signal ir_next 		: std_logic_vector(23 downto 0);
 	signal status_next 	: std_logic_vector(1 downto 0);
+	signal wait_next	: std_logic_vector(31 downto 0);
 
 	-----------------------------------------------------------------
 	-- Signaux apres le registre
@@ -47,6 +52,7 @@ architecture rtl of datapath is
 	signal pc_reg 		: std_logic_vector(15 downto 0);
 	signal ir_reg 		: std_logic_vector(23 downto 0);
 	signal status_reg 	: std_logic_vector(1 downto 0);
+	signal wait_reg		: std_logic_vector(31 downto 0);
 	
 begin
 
@@ -115,11 +121,22 @@ begin
 	-----------------------------------------------------------------
 	-- Action réaliser sur les différents signaux
 	-----------------------------------------------------------------
-	mem_data <= "00000000"&r0_reg(15 downto 0) ;
+	mem_data <= r0_reg ;
 	status_send <= status_reg;
 	param <= ir_reg(15 downto 0 );
 	opcode <= ir_reg(23 downto 16);
 	ir <= ir_reg;
+	param_wait_inter <= std_logic_vector(unsigned(param)*50000);
+	param_wait <= param_wait_inter(31 downto 0); 
+	end_tempo <= '1' when (unsigned(wait_reg) - unsigned(param_wait)) = 0
+		else '0';
+
+	-----------------------------------------------------------------
+	-- Action réaliser sur le registre wait
+	-----------------------------------------------------------------
+	wait_next <= std_logic_vector(unsigned(wait_reg)+1) when cmd_cmp ='0' and end_tempo = '0'
+		else wait_reg when cmd_cmp ='0' and end_tempo = '1'
+		else (others => '0');
 	
 	-----------------------------------------------------------------
 	-- Registre pour cadencer les signaux sur les tic du clk
@@ -133,6 +150,7 @@ begin
 			pc_reg <= (others => '0');
 			ir_reg <= (others => '0');
 			status_reg <= (others => '0');
+			wait_reg <= (others => '0');
 		elsif rising_edge(clk) then
 			r0_reg <= r0_next;
 			r1_reg <= r1_next;
@@ -140,6 +158,7 @@ begin
 			pc_reg <= pc_next;
 			ir_reg <= ir_next;
 			status_reg <= status_next;
+			wait_reg <= wait_next;
 		end if;
 	end process;
 

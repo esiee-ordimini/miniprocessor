@@ -1,0 +1,47 @@
+% Attention :                                                                                              %
+% commentaires exigent caractère pourcentage des 2 cotes !!! %
+% pas d'accents pour limiter les problemes d'encodage               %
+DEPTH=256;                % Nombre de mots que la mémoire peut mémoriser %
+WIDTH=24;                   % Nombre de bits d'un mot  (valeurs décimales) %
+
+ADDRESS_RADIX = HEX; % Base pour les valeurs et les adresses%
+DATA_RADIX = HEX;         % Valeurs possibles BIN, DEC, HEX, OCT %
+
+CONTENT
+BEGIN
+[00..FF] : 000000;        % Valeur par défaut des cases : 0000 %
+            		%test    ; Continue uniquement si vn > 0%
+00: 01001B;
+01: 050000;
+02: 010019;			%		MOV		R1, #vn    ; R1 ← @vn     (R0=? , R1=@vn, R3=?)%
+03: 040000;			%		LDRB		R0, [R1]   ; R0 ← MEM[@n] (R0=vn, R1=@vn, R3=?)
+04: 070000;			%		CMP		R0, R3     ; R0 = 0 ?     (teste si vn = 0)%
+05: 080018;			%		BEQ		fin        ;              (si vn = 0 saute à fin)		%	
+        			%corps   ; Décrémente vn de 1%
+
+06: 0E0000;			%		SUB		R0, R0, R3 ; R0 ← R0 - 1  (R0=vn-1, R1=@vn, R3=1)%
+07: 060000;			%		STRB		R0, [R1]   ; MEM[R1] ← R0%
+08: 01001A;			%		MOV		R1, #res   ; R1 ← @res      (R0=vn, R1=@res, R3=1)%
+09: 040000;			%		LDRB		R0, [R1]   ; R0 ← MEM[@res] (R0=res, R1=@res, R3=1)%
+0A: 0F0000;			%		AND		R0, R0, R3%
+0B: 070000;			%		CMP		R0, R3%
+0C: 080011;			%		BEQ		impaire%       			
+					%paire%
+0D: 040000;			%		LDRB		R0, [R1]%
+0E: 100000;			%		LSR		R0, R0, #1%
+0F: 060000;			%		STRB		R0, [R1]%
+10: 0B0000;			%		B		test%
+        			%impaire%
+11: 040000;			%		LDRB		R0, [R1]%
+12: 130000;			%		MOV		R3, R0%
+13: 120000;			%		ADD		R0, R0, R0%
+14: 110000;			%		ADD		R0, R0, R3%
+15: 0D0001;			%		ADD		R0, R0,  #1%
+16: 060000;			%		STRB		R0, [R1]%
+17: 0B0000;			%		B		test%
+        			%fin%
+18: 0B0018;         		%END		; à mettre obligatoirement en fin de code,%      
+19: 000007;			%vn		DCB		6%
+1A: 00000E;			%res		DCB		14%
+1B: 000001;
+END
