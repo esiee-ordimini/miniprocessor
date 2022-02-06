@@ -16,6 +16,7 @@ entity fsm is port(
 	sel_status : out std_logic;
 	sel_address : out std_logic;
 	cmd_cmp : out std_logic;
+	end_tempo : in std_logic;
 	wren : out std_logic;
 	state_out : out std_logic_vector(7 downto 0)
 );
@@ -89,7 +90,7 @@ begin
 	-----------------------------------------------------------------
 	-- Process pour choisir l'etat
 	-----------------------------------------------------------------
-	process(current_state, opcode, opcode_value, status_N, status_Z) is
+	process(current_state, opcode, opcode_value, status_N, status_Z,end_tempo) is
 	begin
 		next_state <= current_state;
 
@@ -298,8 +299,10 @@ begin
 	--current state == Attendre
 	when Attendre=>
 		state_out <= X"17";
-		next_state <= Incr_PC;
 		cmd_cmp <= '0';
+		if (end_tempo = '1')then
+			next_state <= Incr_PC;
+		end if;
 
 	end case;
 

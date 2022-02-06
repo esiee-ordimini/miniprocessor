@@ -11,9 +11,8 @@ architecture testbench of tb is
 	-----------------------------------------------------------------
 	constant hp			: 	time := 100 ns;
 	signal clk			:	STD_LOGIC  := '0';
-	signal resetn 			:  std_logic;
 	signal sw 			: std_logic_vector(9 downto 0);
-	signal debug 			:  std_logic;
+	signal pb 			:  std_logic_vector(3 downto 0);
 
 	-----------------------------------------------------------------
 	-- Signaux d'affichage
@@ -42,11 +41,11 @@ begin
 		-----------------------------------------------------------------
 		-- Définition des différents signaux
 		-----------------------------------------------------------------
+		sw <= "1000000000";
+		pb <= "0001";
+		wait for hp;
 		sw <= "0000000000";
-		debug <= '1';
-		resetn<= '0';  --initialisation active
-		wait for 4*hp ;
-		resetn<= '1';  --initialisation desactive
+		pb <= "0000";
 		wait; 
        
 	end process;
@@ -57,7 +56,6 @@ begin
 	dut: entity work.top
 		port map(
 			clk 	=>clk,
-			resetn	=>resetn,
 			sw 	=> sw,
 			hex0	=> hex0,
 			hex1	=> hex1,
@@ -65,7 +63,7 @@ begin
 			hex3	=> hex3,
 			hex4	=> hex4,
 			hex5	=> hex5,
-			debug	=> debug,
+			pb	=> pb,
 			lt24_reset_n => lt24_reset_n,
 			lt24_cs_n => lt24_cs_n,
 			lt24_rs => lt24_rs,

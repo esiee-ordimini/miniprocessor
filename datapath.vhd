@@ -19,7 +19,8 @@ port (
 	cmd_cmp			: in std_logic;
 	status_send 		: out std_logic_vector(1 downto 0);
 	opcode 			: out std_logic_vector(7 downto 0);
-	ir 			: out std_logic_vector(23 downto 0)
+	ir 			: out std_logic_vector(23 downto 0);
+	end_tempo		: out std_logic
 );
 end entity;
 architecture rtl of datapath is
@@ -27,10 +28,10 @@ architecture rtl of datapath is
 	-----------------------------------------------------------------
 	-- Signaux sans le registre
 	-----------------------------------------------------------------
-	signal param : std_logic_vector(15 downto 0);
-	signal end_tempo : std_logic;
+	signal param 		: std_logic_vector(15 downto 0);
 	signal param_wait_inter : std_logic_vector(31 downto 0);
-	signal param_wait : std_logic_vector(31 downto 0);
+	signal param_wait 	: std_logic_vector(31 downto 0);
+	signal end_tempo_wait	: std_logic;
 
 	-----------------------------------------------------------------
 	-- Signaux avant le registre
@@ -128,14 +129,15 @@ begin
 	ir <= ir_reg;
 	param_wait_inter <= std_logic_vector(unsigned(param)*50000);
 	param_wait <= param_wait_inter(31 downto 0); 
-	end_tempo <= '1' when (unsigned(wait_reg) - unsigned(param_wait)) = 0
+	end_tempo_wait <= '1' when (unsigned(wait_reg) - unsigned(param_wait)) = 0
 		else '0';
+	end_tempo <= end_tempo_wait;
 
 	-----------------------------------------------------------------
 	-- Action réaliser sur le registre wait
 	-----------------------------------------------------------------
-	wait_next <= std_logic_vector(unsigned(wait_reg)+1) when cmd_cmp ='0' and end_tempo = '0'
-		else wait_reg when cmd_cmp ='0' and end_tempo = '1'
+	wait_next <= std_logic_vector(unsigned(wait_reg)+1) when cmd_cmp ='0' and end_tempo_wait = '0'
+		else wait_reg when cmd_cmp ='0' and end_tempo_wait = '1'
 		else (others => '0');
 	
 	-----------------------------------------------------------------
