@@ -128,9 +128,7 @@ begin
 	param <= ir_reg(15 downto 0 );
 	opcode <= ir_reg(23 downto 16);
 	ir <= ir_reg;
-	param_wait_inter <= std_logic_vector(unsigned(param)*50000);
-	param_wait <= param_wait_inter(31 downto 0); 
-	end_tempo_wait <= '1' when (unsigned(wait_reg) - unsigned(param_wait)) = 0
+	end_tempo_wait <= '1' when unsigned(wait_reg) >= unsigned(param)*50000-1
 		else '0';
 	end_tempo <= end_tempo_wait;
 

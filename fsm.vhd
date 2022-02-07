@@ -175,6 +175,7 @@ begin
 			end if;
 		elsif opcode_value = x"15" then
 		next_state <= Attendre;
+					cmd_cmp <= '0';
 		elsif opcode_value = x"16" then
 		next_state <= Multi;
 	end if;
@@ -302,9 +303,10 @@ begin
 	--current state == Attendre
 	when Attendre=>
 		state_out <= X"17";
-		cmd_cmp <= '0';
 		if (end_tempo = '1')then
 			next_state <= Incr_PC;
+		elsif (end_tempo = '1')then 
+			next_state <= current_state;
 		end if;
 		
 	--current state == Multi

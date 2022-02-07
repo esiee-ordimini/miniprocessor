@@ -6,7 +6,7 @@ entity top is
 port (
 	clk				: in std_logic;
 	sw				: in std_logic_vector(9 downto 0);
-	pb				: in std_logic_vector(3 downto 0);
+	key				: in std_logic_vector(3 downto 0);
 
 	-----------------------------------------------------------------
 	-- Signaux responsable des afficheurs 7 segments et leds
@@ -65,15 +65,16 @@ architecture rtl of top is
 	signal sel_next_r3		: std_logic_vector (2 downto 0);
 	signal sel_address 		: std_logic;
 	signal sel_status 		: std_logic;
-	signal status 			: std_logic_vector(1 downto 0);
-	signal opcode 			: std_logic_vector(7 downto 0);
-	signal state 			: std_logic_vector(7 downto 0);
-	signal ir 			: std_logic_vector(23 downto 0);
-	signal wren 			: std_logic;
+	signal status 				: std_logic_vector(1 downto 0);
+	signal opcode 				: std_logic_vector(7 downto 0);
+	signal state 				: std_logic_vector(7 downto 0);
+	signal ir 					: std_logic_vector(23 downto 0);
+	signal wren 				: std_logic;
 	signal cmd_cmp 			: std_logic;
 	signal address_inter		: std_logic_vector(9 downto 0);
-	signal q 			: std_logic_vector (23 downto 0);
-	signal end_tempo		: std_logic;
+	signal q 					: std_logic_vector (23 downto 0);
+	signal end_tempo			: std_logic;
+	signal pb 					: std_logic_vector (2 downto 0);
 
 	-----------------------------------------------------------------
 	-- Signaux responsable de l'affichage 7 segments et leds
@@ -91,20 +92,16 @@ architecture rtl of top is
 
 begin
 	
-	ledr(7 downto 0) <= mem_address(7 downto 0) when sw(9) = '1'
-			else ledr_reg(7 downto 0);
+	ledr <= ledr_reg;
 	
-	ledr(8) <= sel_next_ir when sw(9) = '1'
-			else ledr_reg(8);
+	resetn <= key(0);
+	
+	pb <= not key(3 downto 1);
 
-	resetn <= '1' when sw(9) = '0'
-		else pb(0);
-
-	ledr_next <= mem_data(9 downto 0) when mem_wren='1' and mem_address(10)='1'
-		else "0000000000" when resetn = '0'
+	ledr_next <= mem_data(9 downto 0) when  mem_address(10 downto 9) = "10" and wren='1'
 		else ledr_reg;
 
-	mem_wren <= '0' when mem_address(9)='1' or mem_address(10)='1'
+	mem_wren <= '0' when mem_address(9)='1' or mem_address(10 downto 9) = "10"
 		else wren ;
 		
 	mem_ecran_wren <= '0' when mem_address(9)='0'
@@ -112,10 +109,10 @@ begin
 		
 	affichage <= ir when sw(8) = '1' and sw(9) = '1'
 		else X"0000"&state when sw(8) = '1' and sw(9) = '1'
-		else mem_q_debug when pb(0) = '1' and sw(9) = '1'
+		else mem_q_debug when  sw(9) = '1'
 		else mem_q;
 
-	mem_address_debug <= sw(7 downto 0) when pb(0) = '1' and sw(9) = '1'
+	mem_address_debug <= sw(7 downto 0) when sw(9) = '1'
 		else (others => '0');
 	
 	mem_ecran_address_1 <= mem_address(8 downto 0);
@@ -124,8 +121,7 @@ begin
 
 	mem_ecran_address_2 <= address_inter(8 downto 0);
 	
-	q <= pb(3 downto 0)&"00000000000"&sw(8 downto 0) when mem_address(10)='1' and sw(9) ='0'
-		else (others => '0') when mem_address(10)='1' and sw(9) ='1'
+	q <= "000000000000"&sw(8 downto 0)&pb when mem_address(10 downto 9)= "10" 
 		else mem_q;
 
 	mem_ecran_data <= mem_data(7 downto 0);
