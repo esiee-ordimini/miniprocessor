@@ -36,7 +36,7 @@ end entity;
 architecture rtl of top is
 
 	-----------------------------------------------------------------
-	-- Signaux responsable de la mémoire double 
+	-- Signaux responsable de la mï¿½moire double 
 	-----------------------------------------------------------------
 	signal mem_q 			: std_logic_vector (23 downto 0) ;
 	signal mem_q_debug 		: std_logic_vector (23 downto 0) ;
@@ -47,7 +47,7 @@ architecture rtl of top is
 	signal resetn	 		: std_logic;
 
 	-----------------------------------------------------------------
-	-- Signaux responsable de la mémoire ecran
+	-- Signaux responsable de la mï¿½moire ecran
 	-----------------------------------------------------------------
 	signal mem_ecran_address_1	: STD_LOGIC_VECTOR (8 DOWNTO 0);
 	signal mem_ecran_address_2	: STD_LOGIC_VECTOR (8 DOWNTO 0);
@@ -91,9 +91,11 @@ architecture rtl of top is
 
 begin
 	
-	ledr(7 downto 0) <= mem_address(7 downto 0)when sw(9) = '1';
+	ledr(7 downto 0) <= mem_address(7 downto 0) when sw(9) = '1'
+			else ledr_reg(7 downto 0);
 	
-	ledr(8) <= sel_next_ir when sw(9) = '1';
+	ledr(8) <= sel_next_ir when sw(9) = '1'
+			else ledr_reg(8);
 
 	resetn <= '1' when sw(9) = '0'
 		else pb(0);
@@ -101,8 +103,6 @@ begin
 	ledr_next <= mem_data(9 downto 0) when mem_wren='1' and mem_address(10)='1'
 		else "0000000000" when resetn = '0'
 		else ledr_reg;
-		
-	ledr <= ledr_reg when sw(9) = '0';
 
 	mem_wren <= '0' when mem_address(9)='1' or mem_address(10)='1'
 		else wren ;
