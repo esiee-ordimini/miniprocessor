@@ -104,7 +104,7 @@ begin
 	mem_wren <= '0' when mem_address(9)='1' or mem_address(10 downto 9) = "10"
 		else wren ;
 		
-	mem_ecran_wren <= '0' when mem_address(9)='0'
+	mem_ecran_wren <= '0' when mem_address(9)= '0' 
 		else wren;
 		
 	affichage <= ir when sw(8) = '1' and sw(9) = '1'
@@ -121,6 +121,8 @@ begin
 
 	mem_ecran_address_2 <= address_inter(8 downto 0);
 	
+	--q <= "000000000000"&sw(8 downto 0)&pb when mem_address(10 downto 9)= "10" 
+	--	else mem_q;
 	q <= "000000000000"&sw(8 downto 0)&pb when mem_address(10 downto 9)= "10" 
 		else mem_q;
 
@@ -226,7 +228,7 @@ begin
 	port map(
 		address_a	=>	mem_ecran_address_1,
 		address_b	=>	mem_ecran_address_2,	
-		clock		=>	clk,
+		clock			=>	clk,
 		data_a		=>	mem_ecran_data,
 		data_b		=>	"00000000",
 		wren_a		=>	mem_ecran_wren,

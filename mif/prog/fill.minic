@@ -1,0 +1,13 @@
+@i = 0;
+@in = 0;
+
+while i < 300 {
+	in = input;
+	if in == 0 {
+		screen[i] = 7;
+	} else {
+		screen[i] = 56;
+	}
+	i = i + 1;
+	wait(100);
+}

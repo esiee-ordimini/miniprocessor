@@ -1,0 +1,7 @@
+@i = 0;
+
+while i < 299 {
+	screen[i] = 7;
+	i = i + 1;
+	wait(100);
+}

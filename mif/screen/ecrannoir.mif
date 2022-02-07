@@ -6,6 +6,5 @@ DATA_RADIX = HEX;
 
 CONTENT
 BEGIN
-[00..FF] : C0;
+[000..1FF] : 00;
 END
-

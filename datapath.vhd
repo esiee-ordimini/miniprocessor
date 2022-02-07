@@ -70,6 +70,7 @@ begin
 		else std_logic_vector(unsigned(r0_reg) + unsigned(r3_reg)) when sel_next_r0 = "0111"
 		else std_logic_vector(unsigned(r0_reg) + unsigned(param)) when sel_next_r0 = "1000"
 		else std_logic_vector(unsigned(r0_reg(11 downto 0)) * unsigned(r3_reg(11 downto 0))) when sel_next_r0 = "1001"
+		else r3_reg when sel_next_r0 = "1010"
 		else (others => '1');
 
 	-----------------------------------------------------------------

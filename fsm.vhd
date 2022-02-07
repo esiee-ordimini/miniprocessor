@@ -51,7 +51,8 @@ architecture rtl of fsm is
 		ADD_R1_R0, 
 		Ecrit_R3_LDRB,
 		Attendre,
-		Multi
+		Multi,
+		MOV_R0_R3
 	);
 
 	-----------------------------------------------------------------
@@ -175,11 +176,12 @@ begin
 			end if;
 		elsif opcode_value = x"15" then
 		next_state <= Attendre;
-					cmd_cmp <= '0';
 		elsif opcode_value = x"16" then
 		next_state <= Multi;
+		elsif opcode_value = x"17" then
+		next_state <= MOV_R0_R3;
 	end if;
-
+	
 	--current state == Ecrit_R1
 	when Ecrit_R1 =>
 		state_out <= X"04";
@@ -302,6 +304,7 @@ begin
 
 	--current state == Attendre
 	when Attendre=>
+		cmd_cmp <= '0';
 		state_out <= X"17";
 		if (end_tempo = '1')then
 			next_state <= Incr_PC;
@@ -314,6 +317,12 @@ begin
 		state_out <= X"18";
 		next_state <= Incr_PC;
 		sel_r0_next <= "1001";
+		
+		--current state == Multi
+	when MOV_R0_R3=>
+		state_out <= X"19";
+		next_state <= Incr_PC;
+		sel_r0_next <= "1010";
 
 	end case;
 
