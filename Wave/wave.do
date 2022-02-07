@@ -70,8 +70,12 @@ add wave -noupdate /tb/dut/cmd_cmp
 add wave -noupdate /tb/dut/end_tempo
 add wave -noupdate /tb/dut/fsm/current_state
 add wave -noupdate /tb/dut/fsm/next_state
+add wave -noupdate -divider Random
+add wave -noupdate /tb/dut/random/seed
+add wave -noupdate /tb/dut/random/cmd_random
+add wave -noupdate /tb/dut/random/result
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {1000513 ps} 0}
+WaveRestoreCursors {{Cursor 1} {206789 ps} 0}
 quietly wave cursor active 1
 configure wave -namecolwidth 150
 configure wave -valuecolwidth 100

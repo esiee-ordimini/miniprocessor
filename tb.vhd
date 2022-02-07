@@ -41,10 +41,10 @@ begin
 		-----------------------------------------------------------------
 		-- Définition des différents signaux
 		-----------------------------------------------------------------
-		sw <= "1000000000";
-		pb <= "0001";
-		wait for hp;
 		sw <= "0000000000";
+		pb <= "0000";
+		wait for hp;
+		sw <= "0100000000";
 		pb <= "0000";
 		wait; 
        
@@ -63,7 +63,7 @@ begin
 			hex3	=> hex3,
 			hex4	=> hex4,
 			hex5	=> hex5,
-			pb	=> pb,
+			key	=> pb,
 			lt24_reset_n => lt24_reset_n,
 			lt24_cs_n => lt24_cs_n,
 			lt24_rs => lt24_rs,

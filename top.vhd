@@ -36,7 +36,7 @@ end entity;
 architecture rtl of top is
 
 	-----------------------------------------------------------------
-	-- Signaux responsable de la m�moire double 
+	-- Signaux responsable de la memoire double 
 	-----------------------------------------------------------------
 	signal mem_q 			: std_logic_vector (23 downto 0) ;
 	signal mem_q_debug 		: std_logic_vector (23 downto 0) ;
@@ -47,7 +47,7 @@ architecture rtl of top is
 	signal resetn	 		: std_logic;
 
 	-----------------------------------------------------------------
-	-- Signaux responsable de la m�moire ecran
+	-- Signaux responsable de la memoire ecran
 	-----------------------------------------------------------------
 	signal mem_ecran_address_1	: STD_LOGIC_VECTOR (8 DOWNTO 0);
 	signal mem_ecran_address_2	: STD_LOGIC_VECTOR (8 DOWNTO 0);
@@ -65,16 +65,16 @@ architecture rtl of top is
 	signal sel_next_r3		: std_logic_vector (2 downto 0);
 	signal sel_address 		: std_logic;
 	signal sel_status 		: std_logic;
-	signal status 				: std_logic_vector(1 downto 0);
-	signal opcode 				: std_logic_vector(7 downto 0);
-	signal state 				: std_logic_vector(7 downto 0);
-	signal ir 					: std_logic_vector(23 downto 0);
-	signal wren 				: std_logic;
+	signal status 			: std_logic_vector(1 downto 0);
+	signal opcode 			: std_logic_vector(7 downto 0);
+	signal state 			: std_logic_vector(7 downto 0);
+	signal ir 			: std_logic_vector(23 downto 0);
+	signal wren 			: std_logic;
 	signal cmd_cmp 			: std_logic;
 	signal address_inter		: std_logic_vector(9 downto 0);
-	signal q 					: std_logic_vector (23 downto 0);
-	signal end_tempo			: std_logic;
-	signal pb 					: std_logic_vector (2 downto 0);
+	signal q 			: std_logic_vector (23 downto 0);
+	signal end_tempo		: std_logic;
+	signal pb 			: std_logic_vector (3 downto 0);
 
 	-----------------------------------------------------------------
 	-- Signaux responsable de l'affichage 7 segments et leds
@@ -90,59 +90,64 @@ architecture rtl of top is
 	signal y    			:  std_logic_vector(8 downto 0);-- 0 .. 319 => 9 bits
 	signal c    			:  std_logic_vector(15 downto 0);-- couleurs 16 bits
 
+	-----------------------------------------------------------------
+	-- Signaux responsable du random
+	-----------------------------------------------------------------
+	signal seed    			:  std_logic_vector(8 downto 0);
+	signal cmd_random    		:  std_logic;
+	signal result    		:  std_logic_vector(8 downto 0);
+
 begin
 	
-	ledr <= ledr_reg;
-	
-	resetn <= key(0);
-	
-	pb <= not key(3 downto 1);
 
-	ledr_next <= mem_data(9 downto 0) when  mem_address(10 downto 9) = "10" and wren='1'
-		else ledr_reg;
+	-----------------------------------------------------------------
+	-- Valeur signaux de base
+	-----------------------------------------------------------------	
+	resetn <= sw(8);
+	pb <= not key;
 
-	mem_wren <= '0' when mem_address(9)='1' or mem_address(10 downto 9) = "10"
-		else wren ;
-		
-	mem_ecran_wren <= '0' when mem_address(9)= '0' 
-		else wren;
-		
+	-----------------------------------------------------------------
+	-- Valeur signaux affichage
+	-----------------------------------------------------------------	
 	affichage <= ir when sw(8) = '1' and sw(9) = '1'
 		else X"0000"&state when sw(8) = '1' and sw(9) = '1'
 		else mem_q_debug when  sw(9) = '1'
 		else mem_q;
-
+	ledr <= ledr_reg;
+	ledr_next <= mem_data(9 downto 0) when  mem_address(10 downto 9) = "10" and wren='1'
+		else ledr_reg;
+	
+	-----------------------------------------------------------------
+	-- Valeur signaux memoire 
+	-----------------------------------------------------------------	
+	q <= "000000000000"&sw(7 downto 0)&pb when mem_address(10 downto 9)= "10" 
+		else mem_q;
 	mem_address_debug <= sw(7 downto 0) when sw(9) = '1'
 		else (others => '0');
-	
-	mem_ecran_address_1 <= mem_address(8 downto 0);
-	
-	address_inter<= std_logic_vector(unsigned(y(8 downto 4))*15 + unsigned(x(7 downto 4)));
+	mem_wren <= '0' when mem_address(9)='1' or mem_address(10 downto 9) = "10"
+		else wren ;
 
-	mem_ecran_address_2 <= address_inter(8 downto 0);
-	
-	
-	q <= "000000000000"&sw(8 downto 0)&pb when mem_address(10 downto 9)= "10" 
-		else mem_q;
-
+	-----------------------------------------------------------------
+	-- Valeur signaux memoire ecran
+	-----------------------------------------------------------------
 	mem_ecran_data <= mem_data(7 downto 0);
-	
+	mem_ecran_address_1 <= mem_address(8 downto 0);
+	address_inter<= std_logic_vector(unsigned(y(8 downto 4))*15 + unsigned(x(7 downto 4)));
+	mem_ecran_address_2 <= address_inter(8 downto 0);
+	mem_ecran_wren <= '0' when mem_address(9)= '0' 
+		else wren;
+
+	-----------------------------------------------------------------
+	-- Valeur signaux couleur
+	-----------------------------------------------------------------
 	c(0)  <= mem_ecran_q(0);
-	c(1)  <= mem_ecran_q(1);
-	c(2)  <= mem_ecran_q(1);
-	c(3)  <= mem_ecran_q(1);
-	c(4)  <= mem_ecran_q(1);
+	c(1)  <= mem_ecran_q(1); c(2)  <= mem_ecran_q(1); c(3)  <= mem_ecran_q(1); c(4)  <= mem_ecran_q(1);
 	c(5)  <= mem_ecran_q(2);
 	c(6)  <= mem_ecran_q(3);
 	c(7)  <= mem_ecran_q(4);
-	c(8)  <= mem_ecran_q(5);
-	c(9)  <= mem_ecran_q(5);
-	c(10) <= mem_ecran_q(5);
+	c(8)  <= mem_ecran_q(5); c(9)  <= mem_ecran_q(5); c(10) <= mem_ecran_q(5);
 	c(11) <= mem_ecran_q(6);
-	c(12) <= mem_ecran_q(7);
-	c(13) <= mem_ecran_q(7);
-	c(14) <= mem_ecran_q(7);
-	c(15) <= mem_ecran_q(7);
+	c(12) <= mem_ecran_q(7); c(13) <= mem_ecran_q(7); c(14) <= mem_ecran_q(7); c(15) <= mem_ecran_q(7);
 	
 	-----------------------------------------------------------------
 	-- Appelle du fichier datapath
@@ -254,7 +259,22 @@ begin
 		lt24_d			=> lt24_d,
 		lt24_lcd_on		=> lt24_lcd_on
 	);
+
+	-----------------------------------------------------------------
+	-- Appelle du fichier Random
+	-----------------------------------------------------------------
+	random : entity work.random
+	port map(
+		clk			=> clk,
+		resetn			=> resetn,
+		seed			=> seed,
+		result			=> result,
+		cmd_random		=> cmd_random
+	);
 	
+	-----------------------------------------------------------------
+	-- Registre pour les leds
+	-----------------------------------------------------------------
 	process(clk, resetn) is
 	begin
 		if resetn <= '0' then
