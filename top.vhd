@@ -121,8 +121,7 @@ begin
 
 	mem_ecran_address_2 <= address_inter(8 downto 0);
 	
-	--q <= "000000000000"&sw(8 downto 0)&pb when mem_address(10 downto 9)= "10" 
-	--	else mem_q;
+	
 	q <= "000000000000"&sw(8 downto 0)&pb when mem_address(10 downto 9)= "10" 
 		else mem_q;
 
