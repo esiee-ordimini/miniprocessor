@@ -1,3 +1,4 @@
+
 -- megafunction wizard: %RAM: 2-PORT%
 -- GENERATION: STANDARD
 -- VERSION: WM1.0
@@ -73,7 +74,7 @@ BEGIN
 		clock_enable_output_a => "BYPASS",
 		clock_enable_output_b => "BYPASS",
 		indata_reg_b => "CLOCK0",
-		init_file => "/user/bazyj/homedir/miniprocessor/mif/prog/testcouleur.mif",
+		init_file => "/user/bazyj/homedir/miniprocessor/mif/prog/multiplication.mif",
 		intended_device_family => "Cyclone V",
 		lpm_type => "altsyncram",
 		numwords_a => 256,

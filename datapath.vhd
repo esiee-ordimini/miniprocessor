@@ -58,7 +58,7 @@ architecture rtl of datapath is
 begin
 
 	-----------------------------------------------------------------
-	-- Action réaliser sur le registre R0
+	-- Action realiser sur le registre R0
 	-----------------------------------------------------------------
 	r0_next <= r0_reg when sel_next_r0 = "0000"
 		else mem_q when sel_next_r0 = "0001"
@@ -69,10 +69,11 @@ begin
 		else std_logic_vector(unsigned(r0_reg) + unsigned(r0_reg)) when sel_next_r0 = "0110"
 		else std_logic_vector(unsigned(r0_reg) + unsigned(r3_reg)) when sel_next_r0 = "0111"
 		else std_logic_vector(unsigned(r0_reg) + unsigned(param)) when sel_next_r0 = "1000"
+		else std_logic_vector(unsigned(r0_reg(11 downto 0)) * unsigned(r3_reg(11 downto 0))) when sel_next_r0 = "1001"
 		else (others => '1');
 
 	-----------------------------------------------------------------
-	-- Action réaliser sur le registre R3
+	-- Action realiser sur le registre R3
 	-----------------------------------------------------------------
 	r3_next <= r3_reg when sel_next_r3 = "000"
 		else mem_q when sel_next_r3 = "001"
@@ -81,7 +82,7 @@ begin
 		else (others => '1');
 
 	-----------------------------------------------------------------
-	-- Action réaliser sur le registre R1
+	-- Action realiser sur le registre R1
 	-----------------------------------------------------------------
 	r1_next <= r1_reg when sel_next_r1 ="00"
 		else ir_reg when sel_next_r1 ="01"
@@ -89,7 +90,7 @@ begin
 		else (others => '1');
 
 	-----------------------------------------------------------------
-	-- Action réaliser sur le registre PC 
+	-- Action realiser sur le registre PC 
 	-----------------------------------------------------------------
 	pc_next <= pc_reg when sel_next_pc="00"
 		else std_logic_vector(unsigned(pc_reg)+1) when sel_next_pc ="01"
@@ -97,13 +98,13 @@ begin
 		else (others => '1');
 
 	-----------------------------------------------------------------
-	-- Action réaliser sur le registre IR
+	-- Action realiser sur le registre IR
 	-----------------------------------------------------------------
 	ir_next <= ir_reg when sel_next_ir ='0'
 		else mem_q ;
 
 	-----------------------------------------------------------------
-	-- Action réaliser sur le status pour comparar des nombres
+	-- Action realiser sur le status pour comparar des nombres
 	-----------------------------------------------------------------
 	status_next(0) <= status_reg(0) when sel_status = '0'
 		else '1' when (unsigned(r0_reg(15 downto 0)) - unsigned(r3_reg(15 downto 0))) = 0
@@ -114,13 +115,13 @@ begin
 	
 
 	-----------------------------------------------------------------
-	-- Action réaliser sur le l'address envoyer a la mémoire
+	-- Action realiser sur le l'address envoyer a la memoire
 	-----------------------------------------------------------------
 	mem_address <= r1_reg(15 downto 0 ) when sel_address = '1'
 		else pc_reg ;
 
 	-----------------------------------------------------------------
-	-- Action réaliser sur les différents signaux
+	-- Action realiser sur les differents signaux
 	-----------------------------------------------------------------
 	mem_data <= r0_reg ;
 	status_send <= status_reg;
@@ -134,7 +135,7 @@ begin
 	end_tempo <= end_tempo_wait;
 
 	-----------------------------------------------------------------
-	-- Action réaliser sur le registre wait
+	-- Action realiser sur le registre wait
 	-----------------------------------------------------------------
 	wait_next <= std_logic_vector(unsigned(wait_reg)+1) when cmd_cmp ='0' and end_tempo_wait = '0'
 		else wait_reg when cmd_cmp ='0' and end_tempo_wait = '1'

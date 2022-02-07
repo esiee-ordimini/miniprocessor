@@ -50,11 +50,12 @@ architecture rtl of fsm is
 		Lit_MemR1_R3, 
 		ADD_R1_R0, 
 		Ecrit_R3_LDRB,
-		Attendre
+		Attendre,
+		Multi
 	);
 
 	-----------------------------------------------------------------
-	-- Signaux pour les états
+	-- Signaux pour les ï¿½tats
 	-----------------------------------------------------------------
 	signal current_state : state;
 	signal next_state : state;
@@ -69,7 +70,7 @@ architecture rtl of fsm is
 begin
 
 	-----------------------------------------------------------------
-	-- Définition des signaux locauxs
+	-- Dï¿½finition des signaux locauxs
 	-----------------------------------------------------------------
 	status_N <= status(1);
 	status_Z <= status(0);
@@ -174,6 +175,8 @@ begin
 			end if;
 		elsif opcode_value = x"15" then
 		next_state <= Attendre;
+		elsif opcode_value = x"16" then
+		next_state <= Multi;
 	end if;
 
 	--current state == Ecrit_R1
@@ -303,6 +306,12 @@ begin
 		if (end_tempo = '1')then
 			next_state <= Incr_PC;
 		end if;
+		
+	--current state == Multi
+	when Multi=>
+		state_out <= X"18";
+		next_state <= Incr_PC;
+		sel_r0_next <= "1001";
 
 	end case;
 

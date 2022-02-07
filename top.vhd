@@ -112,10 +112,10 @@ begin
 		
 	affichage <= ir when sw(8) = '1' and sw(9) = '1'
 		else X"0000"&state when sw(8) = '1' and sw(9) = '1'
-		else mem_q_debug when sw(8) = '1' and sw(9) = '1'
+		else mem_q_debug when pb(0) = '1' and sw(9) = '1'
 		else mem_q;
 
-	mem_address_debug <= sw(7 downto 0) when pb(1) = '1' and sw(9) = '1'
+	mem_address_debug <= sw(7 downto 0) when pb(0) = '1' and sw(9) = '1'
 		else (others => '0');
 	
 	mem_ecran_address_1 <= mem_address(8 downto 0);
