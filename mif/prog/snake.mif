@@ -1,0 +1,406 @@
+DEPTH=1024;
+WIDTH=24;
+
+ADDRESS_RADIX=HEX;
+DATA_RADIX=HEX;
+
+CONTENT
+BEGIN
+00 : 010155;	% MOV R1, #temp_1 %
+01 : 040000;	% LDRB R0, [R1] %
+02 : 010185;	% MOV R1, #var_continue %
+03 : 060000;	% STRB R0, [R1] %
+04 : 010156;	% MOV R1, #temp_2 %
+05 : 040000;	% LDRB R0, [R1] %
+06 : 010186;	% MOV R1, #var_x %
+07 : 060000;	% STRB R0, [R1] %
+08 : 010157;	% MOV R1, #temp_3 %
+09 : 040000;	% LDRB R0, [R1] %
+0A : 010187;	% MOV R1, #var_y %
+0B : 060000;	% STRB R0, [R1] %
+0C : 010158;	% MOV R1, #temp_4 %
+0D : 040000;	% LDRB R0, [R1] %
+0E : 010188;	% MOV R1, #var_length %
+0F : 060000;	% STRB R0, [R1] %
+10 : 010159;	% MOV R1, #temp_5 %
+11 : 040000;	% LDRB R0, [R1] %
+12 : 010189;	% MOV R1, #var_snakecolor %
+13 : 060000;	% STRB R0, [R1] %
+14 : 01015A;	% MOV R1, #temp_6 %
+15 : 040000;	% LDRB R0, [R1] %
+16 : 01018A;	% MOV R1, #var_direction %
+17 : 060000;	% STRB R0, [R1] %
+18 : 010400;	% MOV R1, #0x400 %
+19 : 040000;	% LDRB R0, [R1] %
+1A : 01018B;	% MOV R1, #var_in %
+1B : 060000;	% STRB R0, [R1] %
+1C : 01015B;	% MOV R1, #temp_7 %
+1D : 040000;	% LDRB R0, [R1] %
+1E : 01018C;	% MOV R1, #var_i %
+1F : 060000;	% STRB R0, [R1] %
+20 : 010185;	% MOV R1, #var_continue %
+21 : 040000;	% LDRB R0, [R1] %
+22 : 01015C;	% MOV R1, #temp_8 %
+23 : 050000;	% LDRB R3, [R1] %
+24 : 070000;	% CMP R0, R3 %
+25 : 010153;	% MOV R1, #const_1 %
+26 : 040000;	% LDRB R0, [R1] %
+27 : 08002A;	% BEQ condtrue2 %
+28 : 010154;	% MOV R1, #const_0 %
+29 : 040000;	% LDRB R0, [R1] %
+2A : 01015D;	% MOV R1, #temp_9 %
+2B : 060000;	% STRB R0, [R1] %
+2C : 01015D;	% MOV R1, #temp_9 %
+2D : 040000;	% LDRB R0, [R1] %
+2E : 010153;	% MOV R1, #const_1 %
+2F : 050000;	% LDRB R3, [R1] %
+30 : 070000;	% CMP R0, R3 %
+31 : 140152;	% BNE endwhile1 %
+32 : 010400;	% MOV R1, #0x400 %
+33 : 040000;	% LDRB R0, [R1] %
+34 : 01018B;	% MOV R1, #var_in %
+35 : 060000;	% STRB R0, [R1] %
+36 : 010187;	% MOV R1, #var_y %
+37 : 040000;	% LDRB R0, [R1] %
+38 : 01015E;	% MOV R1, #temp_10 %
+39 : 050000;	% LDRB R3, [R1] %
+3A : 160000;	% MUL R0, R0, R3 %
+3B : 01015F;	% MOV R1, #temp_11 %
+3C : 060000;	% STRB R0, [R1] %
+3D : 01015F;	% MOV R1, #temp_11 %
+3E : 040000;	% LDRB R0, [R1] %
+3F : 010186;	% MOV R1, #var_x %
+40 : 050000;	% LDRB R3, [R1] %
+41 : 110000;	% ADD R0, R0, R3 %
+42 : 010160;	% MOV R1, #temp_12 %
+43 : 060000;	% STRB R0, [R1] %
+44 : 010161;	% MOV R1, #temp_13 %
+45 : 050000;	% LDRB R3, [R1] %
+46 : 010160;	% MOV R1, #temp_12 %
+47 : 040000;	% LDRB R0, [R1] %
+48 : 010200;	% MOV R1, #0x200 %
+49 : 090000;	% ADD R1, R1, R0 %
+4A : 170000;	% MOV R0, R3 %
+4B : 060000;	% STRB R0, [R1] %
+4C : 01018A;	% MOV R1, #var_direction %
+4D : 040000;	% LDRB R0, [R1] %
+4E : 010162;	% MOV R1, #temp_14 %
+4F : 050000;	% LDRB R3, [R1] %
+50 : 0F0000;	% AND R0, R0, R3 %
+51 : 010163;	% MOV R1, #temp_15 %
+52 : 060000;	% STRB R0, [R1] %
+53 : 010163;	% MOV R1, #temp_15 %
+54 : 040000;	% LDRB R0, [R1] %
+55 : 010164;	% MOV R1, #temp_16 %
+56 : 050000;	% LDRB R3, [R1] %
+57 : 070000;	% CMP R0, R3 %
+58 : 010153;	% MOV R1, #const_1 %
+59 : 040000;	% LDRB R0, [R1] %
+5A : 08005D;	% BEQ condtrue5 %
+5B : 010154;	% MOV R1, #const_0 %
+5C : 040000;	% LDRB R0, [R1] %
+5D : 010165;	% MOV R1, #temp_17 %
+5E : 060000;	% STRB R0, [R1] %
+5F : 010165;	% MOV R1, #temp_17 %
+60 : 040000;	% LDRB R0, [R1] %
+61 : 010153;	% MOV R1, #const_1 %
+62 : 050000;	% LDRB R3, [R1] %
+63 : 070000;	% CMP R0, R3 %
+64 : 140094;	% BNE else7 %
+65 : 01018B;	% MOV R1, #var_in %
+66 : 040000;	% LDRB R0, [R1] %
+67 : 010166;	% MOV R1, #temp_18 %
+68 : 050000;	% LDRB R3, [R1] %
+69 : 070000;	% CMP R0, R3 %
+6A : 010153;	% MOV R1, #const_1 %
+6B : 040000;	% LDRB R0, [R1] %
+6C : 08006F;	% BEQ condtrue8 %
+6D : 010154;	% MOV R1, #const_0 %
+6E : 040000;	% LDRB R0, [R1] %
+6F : 010167;	% MOV R1, #temp_19 %
+70 : 060000;	% STRB R0, [R1] %
+71 : 010167;	% MOV R1, #temp_19 %
+72 : 040000;	% LDRB R0, [R1] %
+73 : 010153;	% MOV R1, #const_1 %
+74 : 050000;	% LDRB R3, [R1] %
+75 : 070000;	% CMP R0, R3 %
+76 : 14007C;	% BNE else9 %
+77 : 010168;	% MOV R1, #temp_20 %
+78 : 040000;	% LDRB R0, [R1] %
+79 : 01018A;	% MOV R1, #var_direction %
+7A : 060000;	% STRB R0, [R1] %
+7B : 0B007C;	% B ifend9 %
+7C : 01018B;	% MOV R1, #var_in %
+7D : 040000;	% LDRB R0, [R1] %
+7E : 010169;	% MOV R1, #temp_21 %
+7F : 050000;	% LDRB R3, [R1] %
+80 : 070000;	% CMP R0, R3 %
+81 : 010153;	% MOV R1, #const_1 %
+82 : 040000;	% LDRB R0, [R1] %
+83 : 080086;	% BEQ condtrue10 %
+84 : 010154;	% MOV R1, #const_0 %
+85 : 040000;	% LDRB R0, [R1] %
+86 : 01016A;	% MOV R1, #temp_22 %
+87 : 060000;	% STRB R0, [R1] %
+88 : 01016A;	% MOV R1, #temp_22 %
+89 : 040000;	% LDRB R0, [R1] %
+8A : 010153;	% MOV R1, #const_1 %
+8B : 050000;	% LDRB R3, [R1] %
+8C : 070000;	% CMP R0, R3 %
+8D : 140093;	% BNE else11 %
+8E : 01016B;	% MOV R1, #temp_23 %
+8F : 040000;	% LDRB R0, [R1] %
+90 : 01018A;	% MOV R1, #var_direction %
+91 : 060000;	% STRB R0, [R1] %
+92 : 0B0093;	% B ifend11 %
+93 : 0B00C2;	% B ifend7 %
+94 : 01018B;	% MOV R1, #var_in %
+95 : 040000;	% LDRB R0, [R1] %
+96 : 01016C;	% MOV R1, #temp_24 %
+97 : 050000;	% LDRB R3, [R1] %
+98 : 070000;	% CMP R0, R3 %
+99 : 010153;	% MOV R1, #const_1 %
+9A : 040000;	% LDRB R0, [R1] %
+9B : 08009E;	% BEQ condtrue12 %
+9C : 010154;	% MOV R1, #const_0 %
+9D : 040000;	% LDRB R0, [R1] %
+9E : 01016D;	% MOV R1, #temp_25 %
+9F : 060000;	% STRB R0, [R1] %
+A0 : 01016D;	% MOV R1, #temp_25 %
+A1 : 040000;	% LDRB R0, [R1] %
+A2 : 010153;	% MOV R1, #const_1 %
+A3 : 050000;	% LDRB R3, [R1] %
+A4 : 070000;	% CMP R0, R3 %
+A5 : 1400AB;	% BNE else13 %
+A6 : 01016E;	% MOV R1, #temp_26 %
+A7 : 040000;	% LDRB R0, [R1] %
+A8 : 01018A;	% MOV R1, #var_direction %
+A9 : 060000;	% STRB R0, [R1] %
+AA : 0B00AB;	% B ifend13 %
+AB : 01018B;	% MOV R1, #var_in %
+AC : 040000;	% LDRB R0, [R1] %
+AD : 01016F;	% MOV R1, #temp_27 %
+AE : 050000;	% LDRB R3, [R1] %
+AF : 070000;	% CMP R0, R3 %
+B0 : 010153;	% MOV R1, #const_1 %
+B1 : 040000;	% LDRB R0, [R1] %
+B2 : 0800B5;	% BEQ condtrue14 %
+B3 : 010154;	% MOV R1, #const_0 %
+B4 : 040000;	% LDRB R0, [R1] %
+B5 : 010170;	% MOV R1, #temp_28 %
+B6 : 060000;	% STRB R0, [R1] %
+B7 : 010170;	% MOV R1, #temp_28 %
+B8 : 040000;	% LDRB R0, [R1] %
+B9 : 010153;	% MOV R1, #const_1 %
+BA : 050000;	% LDRB R3, [R1] %
+BB : 070000;	% CMP R0, R3 %
+BC : 1400C2;	% BNE else15 %
+BD : 010171;	% MOV R1, #temp_29 %
+BE : 040000;	% LDRB R0, [R1] %
+BF : 01018A;	% MOV R1, #var_direction %
+C0 : 060000;	% STRB R0, [R1] %
+C1 : 0B00C2;	% B ifend15 %
+C2 : 01018A;	% MOV R1, #var_direction %
+C3 : 040000;	% LDRB R0, [R1] %
+C4 : 010172;	% MOV R1, #temp_30 %
+C5 : 050000;	% LDRB R3, [R1] %
+C6 : 070000;	% CMP R0, R3 %
+C7 : 010153;	% MOV R1, #const_1 %
+C8 : 040000;	% LDRB R0, [R1] %
+C9 : 0800CC;	% BEQ condtrue16 %
+CA : 010154;	% MOV R1, #const_0 %
+CB : 040000;	% LDRB R0, [R1] %
+CC : 010173;	% MOV R1, #temp_31 %
+CD : 060000;	% STRB R0, [R1] %
+CE : 010173;	% MOV R1, #temp_31 %
+CF : 040000;	% LDRB R0, [R1] %
+D0 : 010153;	% MOV R1, #const_1 %
+D1 : 050000;	% LDRB R3, [R1] %
+D2 : 070000;	% CMP R0, R3 %
+D3 : 1400E0;	% BNE else17 %
+D4 : 010186;	% MOV R1, #var_x %
+D5 : 040000;	% LDRB R0, [R1] %
+D6 : 010174;	% MOV R1, #temp_32 %
+D7 : 050000;	% LDRB R3, [R1] %
+D8 : 0E0000;	% SUB R0, R0, R3 %
+D9 : 010175;	% MOV R1, #temp_33 %
+DA : 060000;	% STRB R0, [R1] %
+DB : 010175;	% MOV R1, #temp_33 %
+DC : 040000;	% LDRB R0, [R1] %
+DD : 010186;	% MOV R1, #var_x %
+DE : 060000;	% STRB R0, [R1] %
+DF : 0B00E0;	% B ifend17 %
+E0 : 01018A;	% MOV R1, #var_direction %
+E1 : 040000;	% LDRB R0, [R1] %
+E2 : 010176;	% MOV R1, #temp_34 %
+E3 : 050000;	% LDRB R3, [R1] %
+E4 : 070000;	% CMP R0, R3 %
+E5 : 010153;	% MOV R1, #const_1 %
+E6 : 040000;	% LDRB R0, [R1] %
+E7 : 0800EA;	% BEQ condtrue19 %
+E8 : 010154;	% MOV R1, #const_0 %
+E9 : 040000;	% LDRB R0, [R1] %
+EA : 010177;	% MOV R1, #temp_35 %
+EB : 060000;	% STRB R0, [R1] %
+EC : 010177;	% MOV R1, #temp_35 %
+ED : 040000;	% LDRB R0, [R1] %
+EE : 010153;	% MOV R1, #const_1 %
+EF : 050000;	% LDRB R3, [R1] %
+F0 : 070000;	% CMP R0, R3 %
+F1 : 1400FE;	% BNE else20 %
+F2 : 010187;	% MOV R1, #var_y %
+F3 : 040000;	% LDRB R0, [R1] %
+F4 : 010178;	% MOV R1, #temp_36 %
+F5 : 050000;	% LDRB R3, [R1] %
+F6 : 0E0000;	% SUB R0, R0, R3 %
+F7 : 010179;	% MOV R1, #temp_37 %
+F8 : 060000;	% STRB R0, [R1] %
+F9 : 010179;	% MOV R1, #temp_37 %
+FA : 040000;	% LDRB R0, [R1] %
+FB : 010187;	% MOV R1, #var_y %
+FC : 060000;	% STRB R0, [R1] %
+FD : 0B00FE;	% B ifend20 %
+FE : 01018A;	% MOV R1, #var_direction %
+FF : 040000;	% LDRB R0, [R1] %
+100 : 01017A;	% MOV R1, #temp_38 %
+101 : 050000;	% LDRB R3, [R1] %
+102 : 070000;	% CMP R0, R3 %
+103 : 010153;	% MOV R1, #const_1 %
+104 : 040000;	% LDRB R0, [R1] %
+105 : 080108;	% BEQ condtrue22 %
+106 : 010154;	% MOV R1, #const_0 %
+107 : 040000;	% LDRB R0, [R1] %
+108 : 01017B;	% MOV R1, #temp_39 %
+109 : 060000;	% STRB R0, [R1] %
+10A : 01017B;	% MOV R1, #temp_39 %
+10B : 040000;	% LDRB R0, [R1] %
+10C : 010153;	% MOV R1, #const_1 %
+10D : 050000;	% LDRB R3, [R1] %
+10E : 070000;	% CMP R0, R3 %
+10F : 14011C;	% BNE else23 %
+110 : 010186;	% MOV R1, #var_x %
+111 : 040000;	% LDRB R0, [R1] %
+112 : 01017C;	% MOV R1, #temp_40 %
+113 : 050000;	% LDRB R3, [R1] %
+114 : 110000;	% ADD R0, R0, R3 %
+115 : 01017D;	% MOV R1, #temp_41 %
+116 : 060000;	% STRB R0, [R1] %
+117 : 01017D;	% MOV R1, #temp_41 %
+118 : 040000;	% LDRB R0, [R1] %
+119 : 010186;	% MOV R1, #var_x %
+11A : 060000;	% STRB R0, [R1] %
+11B : 0B011C;	% B ifend23 %
+11C : 01018A;	% MOV R1, #var_direction %
+11D : 040000;	% LDRB R0, [R1] %
+11E : 01017E;	% MOV R1, #temp_42 %
+11F : 050000;	% LDRB R3, [R1] %
+120 : 070000;	% CMP R0, R3 %
+121 : 010153;	% MOV R1, #const_1 %
+122 : 040000;	% LDRB R0, [R1] %
+123 : 080126;	% BEQ condtrue25 %
+124 : 010154;	% MOV R1, #const_0 %
+125 : 040000;	% LDRB R0, [R1] %
+126 : 01017F;	% MOV R1, #temp_43 %
+127 : 060000;	% STRB R0, [R1] %
+128 : 01017F;	% MOV R1, #temp_43 %
+129 : 040000;	% LDRB R0, [R1] %
+12A : 010153;	% MOV R1, #const_1 %
+12B : 050000;	% LDRB R3, [R1] %
+12C : 070000;	% CMP R0, R3 %
+12D : 14013A;	% BNE else26 %
+12E : 010187;	% MOV R1, #var_y %
+12F : 040000;	% LDRB R0, [R1] %
+130 : 010180;	% MOV R1, #temp_44 %
+131 : 050000;	% LDRB R3, [R1] %
+132 : 110000;	% ADD R0, R0, R3 %
+133 : 010181;	% MOV R1, #temp_45 %
+134 : 060000;	% STRB R0, [R1] %
+135 : 010181;	% MOV R1, #temp_45 %
+136 : 040000;	% LDRB R0, [R1] %
+137 : 010187;	% MOV R1, #var_y %
+138 : 060000;	% STRB R0, [R1] %
+139 : 0B013A;	% B ifend26 %
+13A : 010187;	% MOV R1, #var_y %
+13B : 040000;	% LDRB R0, [R1] %
+13C : 010182;	% MOV R1, #temp_46 %
+13D : 050000;	% LDRB R3, [R1] %
+13E : 160000;	% MUL R0, R0, R3 %
+13F : 010183;	% MOV R1, #temp_47 %
+140 : 060000;	% STRB R0, [R1] %
+141 : 010183;	% MOV R1, #temp_47 %
+142 : 040000;	% LDRB R0, [R1] %
+143 : 010186;	% MOV R1, #var_x %
+144 : 050000;	% LDRB R3, [R1] %
+145 : 110000;	% ADD R0, R0, R3 %
+146 : 010184;	% MOV R1, #temp_48 %
+147 : 060000;	% STRB R0, [R1] %
+148 : 010189;	% MOV R1, #var_snakecolor %
+149 : 050000;	% LDRB R3, [R1] %
+14A : 010184;	% MOV R1, #temp_48 %
+14B : 040000;	% LDRB R0, [R1] %
+14C : 010200;	% MOV R1, #0x200 %
+14D : 090000;	% ADD R1, R1, R0 %
+14E : 170000;	% MOV R0, R3 %
+14F : 060000;	% STRB R0, [R1] %
+150 : 1501F4;	% WAIT #0x1F4 %
+151 : 0B0020;	% B startwhile1 %
+152 : 0B0152;	% B endprog %
+153 : 000001;	% const_1 DCB 0x1 %
+154 : 000000;	% const_0 DCB 0x0 %
+155 : 000001;	% temp_1 DCB 0x1 %
+156 : 000000;	% temp_2 DCB 0x0 %
+157 : 000000;	% temp_3 DCB 0x0 %
+158 : 000001;	% temp_4 DCB 0x1 %
+159 : 000038;	% temp_5 DCB 0x38 %
+15A : 000002;	% temp_6 DCB 0x2 %
+15B : 000000;	% temp_7 DCB 0x0 %
+15C : 000001;	% temp_8 DCB 0x1 %
+15D : 000000;	% temp_9 DCB 0x0 %
+15E : 00000F;	% temp_10 DCB 0xF %
+15F : 000000;	% temp_11 DCB 0x0 %
+160 : 000000;	% temp_12 DCB 0x0 %
+161 : 000000;	% temp_13 DCB 0x0 %
+162 : 000001;	% temp_14 DCB 0x1 %
+163 : 000000;	% temp_15 DCB 0x0 %
+164 : 000000;	% temp_16 DCB 0x0 %
+165 : 000000;	% temp_17 DCB 0x0 %
+166 : 000002;	% temp_18 DCB 0x2 %
+167 : 000000;	% temp_19 DCB 0x0 %
+168 : 000001;	% temp_20 DCB 0x1 %
+169 : 000004;	% temp_21 DCB 0x4 %
+16A : 000000;	% temp_22 DCB 0x0 %
+16B : 000003;	% temp_23 DCB 0x3 %
+16C : 000008;	% temp_24 DCB 0x8 %
+16D : 000000;	% temp_25 DCB 0x0 %
+16E : 000000;	% temp_26 DCB 0x0 %
+16F : 000001;	% temp_27 DCB 0x1 %
+170 : 000000;	% temp_28 DCB 0x0 %
+171 : 000002;	% temp_29 DCB 0x2 %
+172 : 000000;	% temp_30 DCB 0x0 %
+173 : 000000;	% temp_31 DCB 0x0 %
+174 : 000001;	% temp_32 DCB 0x1 %
+175 : 000000;	% temp_33 DCB 0x0 %
+176 : 000001;	% temp_34 DCB 0x1 %
+177 : 000000;	% temp_35 DCB 0x0 %
+178 : 000001;	% temp_36 DCB 0x1 %
+179 : 000000;	% temp_37 DCB 0x0 %
+17A : 000002;	% temp_38 DCB 0x2 %
+17B : 000000;	% temp_39 DCB 0x0 %
+17C : 000001;	% temp_40 DCB 0x1 %
+17D : 000000;	% temp_41 DCB 0x0 %
+17E : 000003;	% temp_42 DCB 0x3 %
+17F : 000000;	% temp_43 DCB 0x0 %
+180 : 000001;	% temp_44 DCB 0x1 %
+181 : 000000;	% temp_45 DCB 0x0 %
+182 : 00000F;	% temp_46 DCB 0xF %
+183 : 000000;	% temp_47 DCB 0x0 %
+184 : 000000;	% temp_48 DCB 0x0 %
+185 : 000000;	% var_continue DCB 0x0 %
+186 : 000000;	% var_x DCB 0x0 %
+187 : 000000;	% var_y DCB 0x0 %
+188 : 000000;	% var_length DCB 0x0 %
+189 : 000000;	% var_snakecolor DCB 0x0 %
+18A : 000000;	% var_direction DCB 0x0 %
+18B : 000000;	% var_in DCB 0x0 %
+18C : 000000;	% var_i DCB 0x0 %
+END

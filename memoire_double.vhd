@@ -45,8 +45,8 @@ USE altera_mf.altera_mf_components.all;
 ENTITY memoire_double IS
 	PORT
 	(
-		address_a	: IN STD_LOGIC_VECTOR (7 DOWNTO 0);
-		address_b	: IN STD_LOGIC_VECTOR (7 DOWNTO 0);
+		address_a	: IN STD_LOGIC_VECTOR (11 DOWNTO 0);
+		address_b	: IN STD_LOGIC_VECTOR (11 DOWNTO 0);
 		clock		: IN STD_LOGIC  := '1';
 		data_a		: IN STD_LOGIC_VECTOR (23 DOWNTO 0);
 		data_b		: IN STD_LOGIC_VECTOR (23 DOWNTO 0);
@@ -75,11 +75,11 @@ BEGIN
 		clock_enable_output_a => "BYPASS",
 		clock_enable_output_b => "BYPASS",
 		indata_reg_b => "CLOCK0",
-		init_file => "C:\Users\bazyj\Documents\miniprocessor\mif\prog\fill.mif",
+		init_file => "/user/bazyj/homedir/miniprocessor/mif/prog/snake.mif",
 		intended_device_family => "Cyclone V",
 		lpm_type => "altsyncram",
-		numwords_a => 256,
-		numwords_b => 256,
+		numwords_a => 1024,
+		numwords_b => 1024,
 		operation_mode => "BIDIR_DUAL_PORT",
 		outdata_aclr_a => "NONE",
 		outdata_aclr_b => "NONE",
@@ -89,8 +89,8 @@ BEGIN
 		read_during_write_mode_mixed_ports => "DONT_CARE",
 		read_during_write_mode_port_a => "NEW_DATA_NO_NBE_READ",
 		read_during_write_mode_port_b => "NEW_DATA_NO_NBE_READ",
-		widthad_a => 8,
-		widthad_b => 8,
+		widthad_a => 12,
+		widthad_b => 12,
 		width_a => 24,
 		width_b => 24,
 		width_byteena_a => 1,

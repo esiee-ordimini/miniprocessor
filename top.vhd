@@ -41,7 +41,7 @@ architecture rtl of top is
 	signal mem_q 			: std_logic_vector (23 downto 0) ;
 	signal mem_q_debug 		: std_logic_vector (23 downto 0) ;
 	signal mem_address 		: std_logic_vector(15 downto 0 );
-	signal mem_address_debug 	: std_logic_vector(7 downto 0 );
+	signal mem_address_debug 	: std_logic_vector(11 downto 0 );
 	signal mem_data 		: std_logic_vector(23 downto 0);
 	signal mem_wren 		: std_logic;
 	signal resetn	 		: std_logic;
@@ -103,7 +103,7 @@ begin
 	-----------------------------------------------------------------
 	-- Valeur signaux de base
 	-----------------------------------------------------------------	
-	resetn <= sw(8);
+	resetn <= not sw(8);
 	pb <= not key;
 
 	-----------------------------------------------------------------
@@ -121,8 +121,9 @@ begin
 	-- Valeur signaux memoire 
 	-----------------------------------------------------------------	
 	q <= "000000000000"&sw(7 downto 0)&pb when mem_address(10 downto 9)= "10" 
+		else "000000000000000"&result when mem_address(10 downto 9)= "10" 
 		else mem_q;
-	mem_address_debug <= sw(7 downto 0) when sw(9) = '1'
+	mem_address_debug <= "0000"&sw(7 downto 0) when sw(9) = '1'
 		else (others => '0');
 	mem_wren <= '0' when mem_address(9)='1' or mem_address(10 downto 9) = "10"
 		else wren ;
@@ -178,7 +179,7 @@ begin
 	-----------------------------------------------------------------
 	memoire : entity work.memoire_double
 	port map(
-		address_a	=> mem_address(7 downto 0),
+		address_a	=> mem_address(11 downto 0),
 		address_b	=> mem_address_debug,
 		clock		=> clk,
 		data_a		=> mem_data,
