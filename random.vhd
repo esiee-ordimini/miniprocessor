@@ -66,7 +66,7 @@ begin
 	Q7_next <= seed(7) when cmd_random = '1'
 			else Q6_reg;
 			
-	Q8_next <= seed(7) when cmd_random = '1'
+	Q8_next <= seed(8) when cmd_random = '1'
 			else Q7_reg;
 
 	result <= Q0_reg&Q1_reg&Q2_reg&Q3_reg&Q4_reg&Q5_reg&Q6_reg&Q7_reg&Q8_reg;
@@ -77,15 +77,15 @@ begin
 	process(clk, resetn) is
 	begin
 		if resetn <= '0' then
-			Q0_reg <= '0';
-			Q1_reg <= '0';
-			Q2_reg <= '0';
-			Q3_reg <= '0';
-			Q4_reg <= '0';
-			Q5_reg <= '0';
-			Q6_reg <= '0';
-			Q7_reg <= '0';
-			Q8_reg <= '0';
+			Q0_reg <= '1';
+			Q1_reg <= '1';
+			Q2_reg <= '1';
+			Q3_reg <= '1';
+			Q4_reg <= '1';
+			Q5_reg <= '1';
+			Q6_reg <= '1';
+			Q7_reg <= '1';
+			Q8_reg <= '1';
 
 		elsif rising_edge(clk) then
 			Q0_reg <= Q0_next;

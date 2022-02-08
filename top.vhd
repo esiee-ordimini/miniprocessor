@@ -5,8 +5,9 @@ use ieee.numeric_std.all;
 entity top is
 port (
 	clk				: in std_logic;
-	sw				: in std_logic_vector(9 downto 0);
+	sw					: in std_logic_vector(8 downto 0);
 	key				: in std_logic_vector(3 downto 0);
+	resetn	 		: in std_logic;
 
 	-----------------------------------------------------------------
 	-- Signaux responsable des afficheurs 7 segments et leds
@@ -41,10 +42,9 @@ architecture rtl of top is
 	signal mem_q 			: std_logic_vector (23 downto 0) ;
 	signal mem_q_debug 		: std_logic_vector (23 downto 0) ;
 	signal mem_address 		: std_logic_vector(15 downto 0 );
-	signal mem_address_debug 	: std_logic_vector(11 downto 0 );
+	signal mem_address_debug 	: std_logic_vector(12 downto 0 );
 	signal mem_data 		: std_logic_vector(23 downto 0);
 	signal mem_wren 		: std_logic;
-	signal resetn	 		: std_logic;
 
 	-----------------------------------------------------------------
 	-- Signaux responsable de la memoire ecran
@@ -94,7 +94,7 @@ architecture rtl of top is
 	-- Signaux responsable du random
 	-----------------------------------------------------------------
 	signal seed    			:  std_logic_vector(8 downto 0);
-	signal cmd_random    		:  std_logic;
+	signal cmd_random    		:  std_logic := '0';
 	signal result    		:  std_logic_vector(8 downto 0);
 
 begin
@@ -103,30 +103,31 @@ begin
 	-----------------------------------------------------------------
 	-- Valeur signaux de base
 	-----------------------------------------------------------------	
-	resetn <= not sw(8);
 	pb <= not key;
 
 	-----------------------------------------------------------------
 	-- Valeur signaux affichage
 	-----------------------------------------------------------------	
-	affichage <= ir when sw(8) = '1' and sw(9) = '1'
-		else X"0000"&state when sw(8) = '1' and sw(9) = '1'
-		else mem_q_debug when  sw(9) = '1'
+	affichage <= ir when sw(7) = '1' and sw(8) = '1'
+		else X"0000"&state when sw(7) = '1' and sw(8) = '1'
+		else mem_q_debug when  sw(8) = '1'
+		else mem_data when  mem_address(15 downto 14) = "10" and mem_address(0)='0'
 		else mem_q;
+	
 	ledr <= ledr_reg;
-	ledr_next <= mem_data(9 downto 0) when  mem_address(10 downto 9) = "10" and wren='1'
+	ledr_next <= mem_data(9 downto 0) when  mem_address(15 downto 14) = "10" and wren='1' and mem_address(0)='0'
 		else ledr_reg;
 	
 	-----------------------------------------------------------------
 	-- Valeur signaux memoire 
 	-----------------------------------------------------------------	
-	q <= "000000000000"&sw(7 downto 0)&pb when mem_address(10 downto 9)= "10" 
-		else "000000000000000"&result when mem_address(10 downto 9)= "10" 
+	q <= "000000000000"&sw(7 downto 0)&pb when mem_address(15 downto 14) = "10" 
+		else "000000000000000"&std_logic_vector(unsigned(result)-1)when mem_address(15 downto 14) = "11" 
 		else mem_q;
-	mem_address_debug <= "0000"&sw(7 downto 0) when sw(9) = '1'
+	mem_address_debug <= "00000"&sw(7 downto 0) when sw(8) = '1'
 		else (others => '0');
-	mem_wren <= '0' when mem_address(9)='1' or mem_address(10 downto 9) = "10"
-		else wren ;
+	mem_wren <= wren when mem_address(15 downto 14) = "00" 
+		else '0' ;
 
 	-----------------------------------------------------------------
 	-- Valeur signaux memoire ecran
@@ -135,8 +136,8 @@ begin
 	mem_ecran_address_1 <= mem_address(8 downto 0);
 	address_inter<= std_logic_vector(unsigned(y(8 downto 4))*15 + unsigned(x(7 downto 4)));
 	mem_ecran_address_2 <= address_inter(8 downto 0);
-	mem_ecran_wren <= '0' when mem_address(9)= '0' 
-		else wren;
+	mem_ecran_wren <= '1' when mem_address(15 downto 14) = "01" 
+		else '0';
 
 	-----------------------------------------------------------------
 	-- Valeur signaux couleur
@@ -179,7 +180,7 @@ begin
 	-----------------------------------------------------------------
 	memoire : entity work.memoire_double
 	port map(
-		address_a	=> mem_address(11 downto 0),
+		address_a	=> mem_address(12 downto 0),
 		address_b	=> mem_address_debug,
 		clock		=> clk,
 		data_a		=> mem_data,
@@ -266,9 +267,9 @@ begin
 	-----------------------------------------------------------------
 	random : entity work.random
 	port map(
-		clk			=> clk,
+		clk				=> clk,
 		resetn			=> resetn,
-		seed			=> seed,
+		seed				=> seed,
 		result			=> result,
 		cmd_random		=> cmd_random
 	);
