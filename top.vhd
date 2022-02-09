@@ -7,6 +7,7 @@ port (
 	clk				: in std_logic;
 	sw					: in std_logic_vector(8 downto 0);
 	key				: in std_logic_vector(3 downto 0);
+	joystick			: in std_logic_vector(3 downto 0);	
 	resetn	 		: in std_logic;
 
 	-----------------------------------------------------------------
@@ -101,7 +102,7 @@ architecture rtl of top is
 	-- Signaux responsable du random
 	-----------------------------------------------------------------
 	signal data_in    			:  std_logic_vector(8 downto 0);
-	signal data_out    			:  std_logic_vector(23 downto 0);
+	signal data_out    			:  std_logic_vector(11 downto 0);
 
 begin
 	
@@ -110,6 +111,7 @@ begin
 	-- Valeur signaux de base
 	-----------------------------------------------------------------	
 	pb <= not key;
+	data_in <= mem_data(8 downto 0) when mem_address(15 downto 14) = "10" and mem_address(0) = '1';
 
 	-----------------------------------------------------------------
 	-- Valeur signaux affichage
@@ -118,16 +120,18 @@ begin
 		else X"0000"&state when sw(7) = '1' and sw(8) = '1'
 		else mem_q_debug when  sw(8) = '1'
 		else mem_data when  mem_address(15 downto 14) = "10" and mem_address(0)='0'
+		else "000000000000"&data_out when sw(0)='1' 
 		else mem_q;
 	
 	ledr <= ledr_reg;
-	ledr_next <= mem_data(9 downto 0) when  mem_address(15 downto 14) = "10" and wren='1' and mem_address(0)='0'
-		else ledr_reg;
+	ledr_next <= "000000"&joystick;
+	--mem_data(9 downto 0) when  mem_address(15 downto 14) = "10" and wren='1' and mem_address(0)='0'
+	--	else ledr_reg;
 	
 	-----------------------------------------------------------------
 	-- Valeur signaux memoire 
 	-----------------------------------------------------------------	
-	q <= "000000000000"&sw(7 downto 0)&pb when mem_address(15 downto 14) = "10" 
+	q <= "000000000000"&"00000000"&(not joystick) when mem_address(15 downto 14) = "10" and mem_address(0) = '0'
 		else "000000000000000"&std_logic_vector(unsigned(result)-1)when mem_address(15 downto 14) = "11" 
 		else mem_q;
 	mem_address_debug <= "00000"&sw(7 downto 0) when sw(8) = '1'
