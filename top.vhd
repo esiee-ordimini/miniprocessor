@@ -39,12 +39,12 @@ architecture rtl of top is
 	-----------------------------------------------------------------
 	-- Signaux responsable de la memoire double 
 	-----------------------------------------------------------------
-	signal mem_q 			: std_logic_vector (23 downto 0) ;
-	signal mem_q_debug 		: std_logic_vector (23 downto 0) ;
-	signal mem_address 		: std_logic_vector(15 downto 0 );
+	signal mem_q 					: std_logic_vector (23 downto 0) ;
+	signal mem_q_debug 			: std_logic_vector (23 downto 0) ;
+	signal mem_address 			: std_logic_vector(15 downto 0 );
 	signal mem_address_debug 	: std_logic_vector(12 downto 0 );
-	signal mem_data 		: std_logic_vector(23 downto 0);
-	signal mem_wren 		: std_logic;
+	signal mem_data 				: std_logic_vector(23 downto 0);
+	signal mem_wren 				: std_logic;
 
 	-----------------------------------------------------------------
 	-- Signaux responsable de la memoire ecran
@@ -52,50 +52,56 @@ architecture rtl of top is
 	signal mem_ecran_address_1	: STD_LOGIC_VECTOR (8 DOWNTO 0);
 	signal mem_ecran_address_2	: STD_LOGIC_VECTOR (8 DOWNTO 0);
 	signal mem_ecran_wren		: STD_LOGIC ;
-	signal mem_ecran_q  		: STD_LOGIC_VECTOR (7 DOWNTO 0);
+	signal mem_ecran_q  			: STD_LOGIC_VECTOR (7 DOWNTO 0);
 	signal mem_ecran_data 		: std_logic_vector(7 downto 0);
 
 	-----------------------------------------------------------------
 	-- Signaux responsable de la fsm pour le datapath
 	-----------------------------------------------------------------
-	signal sel_next_pc 		: std_logic_vector(1 downto 0 );
-	signal sel_next_ir 		: std_logic;
-	signal sel_next_r0 		: std_logic_vector (3 downto 0);
-	signal sel_next_r1		: std_logic_vector(1 downto 0 );
-	signal sel_next_r3		: std_logic_vector (2 downto 0);
-	signal sel_address 		: std_logic;
-	signal sel_status 		: std_logic;
-	signal status 			: std_logic_vector(1 downto 0);
-	signal opcode 			: std_logic_vector(7 downto 0);
-	signal state 			: std_logic_vector(7 downto 0);
-	signal ir 			: std_logic_vector(23 downto 0);
-	signal wren 			: std_logic;
-	signal cmd_cmp 			: std_logic;
-	signal address_inter		: std_logic_vector(9 downto 0);
-	signal q 			: std_logic_vector (23 downto 0);
-	signal end_tempo		: std_logic;
-	signal pb 			: std_logic_vector (3 downto 0);
+	signal sel_next_pc 			: std_logic_vector(1 downto 0 );
+	signal sel_next_ir 			: std_logic;
+	signal sel_next_r0 			: std_logic_vector (3 downto 0);
+	signal sel_next_r1			: std_logic_vector(1 downto 0 );
+	signal sel_next_r3			: std_logic_vector (2 downto 0);
+	signal sel_address 			: std_logic;
+	signal sel_status 			: std_logic;
+	signal status 					: std_logic_vector(1 downto 0);
+	signal opcode 					: std_logic_vector(7 downto 0);
+	signal state 					: std_logic_vector(7 downto 0);
+	signal ir 						: std_logic_vector(23 downto 0);
+	signal wren 					: std_logic;
+	signal cmd_cmp 				: std_logic;
+	signal address_inter			: std_logic_vector(9 downto 0);
+	signal q 						: std_logic_vector (23 downto 0);
+	signal end_tempo				: std_logic;
+	signal pb 						: std_logic_vector (3 downto 0);
 
 	-----------------------------------------------------------------
 	-- Signaux responsable de l'affichage 7 segments et leds
 	-----------------------------------------------------------------
-	signal affichage 		: std_logic_vector(23 downto 0);
-	signal ledr_reg 		: std_logic_vector(9 downto 0);
-	signal ledr_next 		: std_logic_vector(9 downto 0);
+	signal affichage 				: std_logic_vector(23 downto 0);
+	signal ledr_reg 				: std_logic_vector(9 downto 0);
+	signal ledr_next 				: std_logic_vector(9 downto 0);
 	
 	-----------------------------------------------------------------
 	-- Signaux responsable de l'ecran
 	-----------------------------------------------------------------
-	signal x    			:  std_logic_vector(7 downto 0);-- 0 .. 239 => 8 bits
-	signal y    			:  std_logic_vector(8 downto 0);-- 0 .. 319 => 9 bits
-	signal c    			:  std_logic_vector(15 downto 0);-- couleurs 16 bits
+	signal x    					: std_logic_vector(7 downto 0);-- 0 .. 239 => 8 bits
+	signal y    					: std_logic_vector(8 downto 0);-- 0 .. 319 => 9 bits
+	signal c    					: std_logic_vector(15 downto 0);-- couleurs 16 bits
 
 	-----------------------------------------------------------------
 	-- Signaux responsable du random
 	-----------------------------------------------------------------
-	signal seed    			:  std_logic_vector(8 downto 0);
+	signal seed    				:  std_logic_vector(8 downto 0);
 	signal cmd_random    		:  std_logic := '0';
-	signal result    		:  std_logic_vector(8 downto 0);
+	signal result    				:  std_logic_vector(8 downto 0);
+	
+	-----------------------------------------------------------------
+	-- Signaux responsable du random
+	-----------------------------------------------------------------
+	signal data_in    			:  std_logic_vector(8 downto 0);
+	signal data_out    			:  std_logic_vector(23 downto 0);
 
 begin
 	
@@ -273,6 +279,16 @@ begin
 		result			=> result,
 		cmd_random		=> cmd_random
 	);
+	
+	-----------------------------------------------------------------
+	-- Appelle du fichier convertisseur bin2bcd
+	-----------------------------------------------------------------
+	bin2bcd : entity work.bin2bcd
+   generic map (N => 9)
+   port map (
+     data_in  => data_in,
+     data_out => data_out
+   );
 	
 	-----------------------------------------------------------------
 	-- Registre pour les leds
