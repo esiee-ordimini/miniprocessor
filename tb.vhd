@@ -11,8 +11,10 @@ architecture testbench of tb is
 	-----------------------------------------------------------------
 	constant hp			: 	time := 100 ns;
 	signal clk			:	STD_LOGIC  := '0';
-	signal sw 			: std_logic_vector(9 downto 0);
+	signal resetn 			: std_logic;
+	signal sw 			: std_logic_vector(8 downto 0);
 	signal pb 			:  std_logic_vector(3 downto 0);
+	signal joystick 		:  std_logic_vector(3 downto 0);
 
 	-----------------------------------------------------------------
 	-- Signaux d'affichage
@@ -41,11 +43,13 @@ begin
 		-----------------------------------------------------------------
 		-- Définition des différents signaux
 		-----------------------------------------------------------------
-		sw <= "0000000000";
+		sw <= "000000000";
 		pb <= "0000";
+		joystick <= "0000";
 		wait for hp;
-		sw <= "0100000000";
+		sw <= "000000000";
 		pb <= "0000";
+		joystick <= "0000";
 		wait; 
        
 	end process;
@@ -64,6 +68,8 @@ begin
 			hex4	=> hex4,
 			hex5	=> hex5,
 			key	=> pb,
+			resetn  => resetn,
+			joystick => joystick,
 			lt24_reset_n => lt24_reset_n,
 			lt24_cs_n => lt24_cs_n,
 			lt24_rs => lt24_rs,

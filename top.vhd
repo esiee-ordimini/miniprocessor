@@ -101,7 +101,8 @@ architecture rtl of top is
 	-----------------------------------------------------------------
 	-- Signaux responsable du random
 	-----------------------------------------------------------------
-	signal data_in    			:  std_logic_vector(8 downto 0);
+	signal data_in_next    			:  std_logic_vector(8 downto 0);
+	signal data_in_reg    			:  std_logic_vector(8 downto 0);
 	signal data_out    			:  std_logic_vector(11 downto 0);
 
 begin
@@ -111,7 +112,8 @@ begin
 	-- Valeur signaux de base
 	-----------------------------------------------------------------	
 	pb <= not key;
-	data_in <= mem_data(8 downto 0) when mem_address(15 downto 14) = "10" and mem_address(0) = '1';
+	data_in_next <= std_logic_vector(unsigned(data_in_reg) +1) when mem_address(15 downto 14) = "10" and mem_address(0) = '1'
+		else data_in_reg;
 
 	-----------------------------------------------------------------
 	-- Valeur signaux affichage
@@ -290,7 +292,7 @@ begin
 	bin2bcd : entity work.bin2bcd
    generic map (N => 9)
    port map (
-     data_in  => data_in,
+     data_in  => data_in_reg,
      data_out => data_out
    );
 	
@@ -301,8 +303,10 @@ begin
 	begin
 		if resetn <= '0' then
 			ledr_reg <= (others => '0');
+			data_in_reg <= (others => '0');
 		elsif rising_edge(clk) then
 			ledr_reg <= ledr_next;
+			data_in_reg <= data_in_next;
 		end if;
 	end process;
 end architecture;
