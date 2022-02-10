@@ -101,7 +101,7 @@ architecture rtl of top is
 	-----------------------------------------------------------------
 	-- Signaux responsable du random
 	-----------------------------------------------------------------
-	signal data_in_next    			:  std_logic_vector(8 downto 0);
+	signal data_in_next    	   :  std_logic_vector(8 downto 0);
 	signal data_in_reg    			:  std_logic_vector(8 downto 0);
 	signal data_out    			:  std_logic_vector(11 downto 0);
 
@@ -112,7 +112,7 @@ begin
 	-- Valeur signaux de base
 	-----------------------------------------------------------------	
 	pb <= not key;
-	data_in_next <= std_logic_vector(unsigned(data_in_reg) +1) when mem_address(15 downto 14) = "10" and mem_address(0) = '1'
+	data_in_next <= mem_data(8 downto 0) when mem_address(15 downto 14) = "10" and mem_address(0) = '1'
 		else data_in_reg;
 
 	-----------------------------------------------------------------
