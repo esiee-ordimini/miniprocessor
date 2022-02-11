@@ -136,6 +136,7 @@ begin
 	q <= "000000000000"&"00000000"&(not joystick) when mem_address(15 downto 14) = "10" and mem_address(0) = '0'
 		else "000000000000000"&std_logic_vector(unsigned(result)-1)when mem_address(15 downto 14) = "11" 
 		else mem_q;
+		
 	mem_address_debug <= "00000"&sw(7 downto 0) when sw(8) = '1'
 		else (others => '0');
 	mem_wren <= wren when mem_address(15 downto 14) = "00" 
